@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relay Controller | Polyvision</title>
+
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <form id="saveForm">
+        <h1>Save a Program</h1>
+        <label for="confname">Conf Name</label>
+        <input type="text" name="confname" id="confname">
+
+        <br>
+        <br>
+
+        <label for="conf">Save a Conf</label>
+        <br>
+        <textarea name="conf" id="conf" cols="60" rows="10"></textarea>
+    
+        <br>
+
+        <button type="submit">Save</button>
+    </form>
+
+    <br>
+    <hr> -->
+
+    <form id="runnerForm">
+        <h1>Run a Runner</h1>
+        <label for="runners">Select Runner</label>
+        <select name="runners" id="runners"></select>
+
+        <br>
+        <br>
+
+        <p>Auto Execution in <b id="seconds">3</b> seconds</p>
+        <b id="isactive" style="display:none">IT IS WORKING NOW</b>
+        <br>
+        <br>
+
+        <!-- <button type="submit">Stop All</button> -->
+        <button id="button" type="submit">Execute</button>
+    </form>
+
+    <script src="./jquery.min.js"></script>
+
+    <script>
+        $(function () {
+            const $runners = $('#runners')
+            const $seconds = $('#seconds')
+            const $isactive = $('#isactive')
+            const $button = $('#button')
+
+            function retrieveRunners() {
+                $.get('http://briefodasi:3000/retrieve-runners', (runners) => {
+                    $runners.find('option').remove().end()
+
+                    for (const runner of runners) {
+                        const option = $('<option></option>').attr('value', runner).text(runner)
+                        option.click(function (e) {
+                            console.log("runner val",e.target.value);
+                            localStorage.setItem("runner",e.target.value)
+                        })
+                        $runners.append(option);
+                    }
+
+                    const lastSelectedRunner = localStorage.getItem("runner")
+                    if (lastSelectedRunner) {
+                        $runners.val(lastSelectedRunner)
+                    }
+                })
+            }
+
+            retrieveRunners()
+
+            const start = new Date()
+
+            const interval = setInterval(() => {
+                const now = new Date()
+                const seconds = 3 - Math.floor((now - start) / 1000)
+                if (seconds < 0) {
+                    executeSelectedRunner()
+                    return clearInterval(interval)
+                }
+                $seconds.text(seconds)
+            }, 1000)
+
+            function executeSelectedRunner() {
+                $.ajax({
+                    url: 'http://briefodasi:3000/execute-runner',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        name: $runners.find(':selected').text(),
+                    }),
+                    success: function (result) {
+                        $isactive.css('display', 'block');
+                        $button.hide()
+                        retrieveRunners()
+                    },
+                    error: function (error) {
+                        alert('Failed to execute this runner')
+                        console.log(error)
+                    }
+                })
+            }
+
+            $(document).on('submit', 'form#runnerForm', function () {
+                executeSelectedRunner()
+            });
+        });
+    </script>
+</body>
+
+</html>

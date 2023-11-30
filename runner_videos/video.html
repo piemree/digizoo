@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polyvision</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+        }
+
+        #video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body>
+    <video id="video" loop></video>
+
+    <script src="./jquery.min.js"></script>
+    <script>
+        $(function () {
+            $video = $("#video")
+
+            function retrieveParam(name) {
+                return (location.search.split(name + '=')[1] || '').split('&')[0];
+            }
+
+            const videoName = retrieveParam('video');
+            const counterParam = retrieveParam('counter');
+            let counter = null
+            if (counterParam && !isNaN(counterParam)) {
+                $("body").css("min-height","100vh");
+                $("body").css("position","relative");
+                counter = parseInt(counterParam)
+                setInterval(() => {
+                    if (counter === 0) return
+                    $("#counter").remove()
+                    counter--
+                    let counterElement = `<span 
+                    style="
+                    color:black;
+                    border-radius:5px;
+                    font-size:64px;
+                    font-weight:bold;
+                    background-color:white;
+                    padding:5px;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    z-index: 10;
+                    transform: translate(-50%,-50%);"
+                    id="counter">${counter}</span>`
+                    $("body").append(counterElement);
+                }, 1000)
+
+
+            }
+
+            $video.attr('src', './' + videoName);
+
+            var toJump = ''
+
+            $(document).on('keypress', function (e) {
+                console.log(e)
+                if (e.code === 'KeyR') {
+                    $video.trigger('play');
+                }
+
+                if (e.code === 'KeyP') {
+                    $video.trigger('pause');
+                }
+
+                if (e.code === 'KeyJ') {
+                    document.getElementById('video').currentTime = parseFloat(toJump)
+                    toJump = ''
+                }
+
+                if (
+                    (e.keyCode >= 48 && e.keyCode <= 57) ||
+                    (e.key === '.')
+                ) {
+                    toJump += e.key
+                }
+            });
+        })
+    </script>
+</body>
+
+</html>
