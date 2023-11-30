@@ -81,7 +81,7 @@ PLAY_VIDEO
 #SELECT_SCREEN 3
 #PLAY_VIDEO
 
-SIGNAL "wait-for-enter"
+SIGNAL "giris-icin-bekleyin"
 
 WAIT 10000
 
@@ -117,6 +117,8 @@ PLAY_VIDEO
 #PLAY_VIDEO
 
 WAIT 10000
+
+SIGNAL "giris-yapabilirsiniz"
 
 GOTO BRIEF_START
 

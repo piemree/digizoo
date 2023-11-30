@@ -7,14 +7,14 @@ START_BROWSER
 WAIT_SIGNAL "giris-icin-bekleyin"
 
 SELECT_SCREEN 0
-LOAD_VIDEO "giris-icin-bekleyin.mp4" 10
+LOAD_VIDEO "giris-icin-bekleyin.mp4" 20
 
 WAIT 1000
 
 SELECT_SCREEN 0
 PLAY_VIDEO
 
-WAIT 10000
+WAIT 20000
 
 ##############################
 
