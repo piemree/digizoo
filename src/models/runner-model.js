@@ -16,10 +16,11 @@ function createVideoHTMLLink(name, counter) {
 }
 
 async function openVideoInTab(tab, name, counter) {
-    tab.goto(
+    await tab.goto(
         createVideoHTMLLink(name, counter),
         { waitUntil: 'domcontentloaded', timeout: 0 }
     )
+    console.log('selam')
 }
 
 function computeRunnerPath(name) {
@@ -325,7 +326,9 @@ async function executeRunnerCommands(
             if (!browser) throw new Error('No browser on screen: ' + selectedScreen)
             console.log(selectedScreen,value,value2);
             const page = (await browser.pages())[1]
-            openVideoInTab(page, value,value2)
+            openVideoInTab(page, value, value2)
+            await waitFor(1000)
+            await page.keyboard.press('r') // play video
 
             continue
         }
@@ -335,7 +338,6 @@ async function executeRunnerCommands(
             const browser = screen2Browser[selectedScreen]
             if (!browser) throw new Error('No browser on screen: ' + selectedScreen)
             const page = (await browser.pages())[1]
-
             await page.keyboard.press('r')
 
             continue

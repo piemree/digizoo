@@ -16,11 +16,7 @@ WAIT_SIGNAL "giris-yapabilirsiniz"
 
 LOAD_VIDEO "giris-yapabilirsiniz.mp4" 20
 
-# wait for the video to be loaded
-WAIT 1s
-
-# PLAY_VIDEO
-
+# wait for the video to finish
 WAIT 10s
 
 LOAD_VIDEO "giris-icin-bekleyin.mp4" 25
