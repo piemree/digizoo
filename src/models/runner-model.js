@@ -220,6 +220,16 @@ async function waitForSIGNAL(socket, name) {
     })
 }
 
+async function waitForRFID(socket) {
+    return new Promise(resolve => {
+        const listener = socket.on('receive_rfid', (data) => {
+            console.log('received:', data)
+            socket.off('receive_rfid', listener)
+            resolve(data)
+        })
+    })
+}
+
 async function executeRunnerCommands(
     commands,
     GOTO = null,
@@ -256,6 +266,14 @@ async function executeRunnerCommands(
         if (type === 'WAIT_SIGNAL') {
             await waitForSIGNAL(socket, value)
             continue
+        }
+
+        if (type === 'WAIT_RFID') {
+            const rfid = await waitForRFID(socket)
+            console.log('rfidread:', rfid)
+            const TOGO = map[rfid]
+            executeRunnerCommands(commands, TOGO, selectedScreen, selectedBoard, screen2Browser, selectedSocketServer)
+            break
         }
 
         if (type === 'SIGNAL') {
@@ -346,6 +364,8 @@ async function executeRunnerCommands(
             const page = (await browser.pages())[1]
 
             const toJump = String(value)
+
+            await page.keyboard.press('d')
 
             for (const char of toJump) {
                 await page.keyboard.press(char)
