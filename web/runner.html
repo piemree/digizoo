@@ -65,7 +65,7 @@
             const $button = $('#button')
 
             function retrieveRunners() {
-                $.get('http://briefodasi:3000/retrieve-runners', (runners) => {
+                $.get('http://localhost:3000/retrieve-runners', (runners) => {
                     $runners.find('option').remove().end()
 
                     for (const runner of runners) {
@@ -100,7 +100,7 @@
 
             function executeSelectedRunner() {
                 $.ajax({
-                    url: 'http://briefodasi:3000/execute-runner',
+                    url: 'http://localhost:3000/execute-runner',
                     type: 'POST',
                     dataType: 'json',
                     contentType: 'application/json; charset=utf-8',
