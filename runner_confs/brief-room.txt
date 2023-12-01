@@ -43,6 +43,7 @@ PLAY_VIDEO
 SELECT_SCREEN 3
 PLAY_VIDEO
 
+SIGNAL "giris-icin-bekleyin"
 
 WAIT 10000
 
@@ -77,8 +78,6 @@ PLAY_VIDEO
 
 SELECT_SCREEN 3
 PLAY_VIDEO
-
-SIGNAL "giris-icin-bekleyin"
 
 WAIT 10000
 
