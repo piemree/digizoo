@@ -9,12 +9,9 @@ const { io } = require("socket.io-client");
 const { waitFor } = require('../utils/wait-for')
 const { computeRelayConfPath, executeRelayConf } = require('./usb-relay-model')
 
-const { SetWindowScriptPath, videoHTML, videoHTMLLink, runnerConfsDir, briefEnterHtml } = require('../parameters')
+const { SetWindowScriptPath, videoHTML, videoHTMLLink, runnerConfsDir } = require('../parameters')
 
 function createVideoHTMLLink(name, counter) {
-    if (name === "brief-enter.mp4") {
-        return briefEnterHtml + '?video=' + encodeURI(name) + "?counter=" + encodeURI(counter)
-    }
     return videoHTMLLink + '?video=' + encodeURI(name) + "?counter=" + encodeURI(counter)
 }
 
@@ -270,6 +267,7 @@ async function executeRunnerCommands(
 
         if (type === 'WAIT_RFID') {
             const rfid = await waitForRFID(socket)
+            console.log('rfidread:', rfid)
             const TOGO = map[rfid]
             executeRunnerCommands(commands, TOGO, selectedScreen, selectedBoard, screen2Browser, selectedSocketServer)
             break
