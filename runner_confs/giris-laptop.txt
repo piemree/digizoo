@@ -13,14 +13,21 @@ TOGO LAPTOP_LOOP
 
 # load and play you can enter now
 WAIT_SIGNAL "giris-yapabilirsiniz"
+
 LOAD_VIDEO "giris-yapabilirsiniz.mp4" 20
-PLAY_VIDEO
+
+# wait for the video to be loaded
+WAIT 1s
+
+# PLAY_VIDEO
 
 WAIT 10s
 
 LOAD_VIDEO "giris-icin-bekleyin.mp4" 25
-PLAY_VIDEO
+
+# wait for video to be loaded
+# WAIT 1s
+# PLAY_VIDEO
 
 # we do not need to wait here for 25s as the socket will be waited
-
 GOTO LAPTOP_LOOP
