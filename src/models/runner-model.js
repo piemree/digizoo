@@ -144,7 +144,11 @@ async function sendToMonitor(pid, screenIndex = 0) {
 async function launchBrowser(screenIndex = 0) {
     try {
         // retrieve all the PIDs with the name firefox
-        const pidBlacklist = await getpid('firefox')
+        // const pidBlacklist = await getpid('firefox')
+
+        const screen = displays.sort((a, b) => a.left - b.left)[screenIndex] // asc
+        if (!screen) throw new Error('Screen not found: ' + screenIndex)
+        const { top, left, width, height } = screen
 
         const browser = await puppeteer.launch({
             headless: false,
@@ -176,12 +180,12 @@ async function launchBrowser(screenIndex = 0) {
         // await page.target().createCDPSession();
         await page.target().createCDPSession();
 
-        const pids = await getpid('chrome')
-        const pidWhitelist = pids.filter((pid) => !pidBlacklist.includes(pid))
+        // const pids = await getpid('chrome')
+        // const pidWhitelist = pids.filter((pid) => !pidBlacklist.includes(pid))
 
-        for (const pid of pidWhitelist) {
-            await sendToMonitor(pid, screenIndex)
-        }
+        // for (const pid of pidWhitelist) {
+        //     await sendToMonitor(pid, screenIndex)
+        // }
 
         // await waitFor(2000)
 
