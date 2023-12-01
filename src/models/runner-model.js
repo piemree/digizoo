@@ -209,6 +209,7 @@ async function retrieveAnActiveSocketConnection(server = 'http://localhost:3000'
 async function waitForSIGNAL(socket, name) {
     await new Promise(resolve => {
         const listener = socket.on('receive', (data) => {
+            console.log("recieved signal", data);
             if (data === name) {
                 socket.off('receive', listener)
                 resolve()
@@ -275,6 +276,7 @@ async function executeRunnerCommands(
 
         if (type === 'SIGNAL') {
             socket.emit('send', value)
+            console.log("send signal",value);
             continue
         }
 
@@ -327,7 +329,7 @@ async function executeRunnerCommands(
             if (!browser) throw new Error('No browser on screen: ' + selectedScreen)
 
             const page = (await browser.pages())[1]
-            openVideoInTab(page, value,value2)
+            openVideoInTab(page, value, value2)
 
             continue
         }
