@@ -128,11 +128,7 @@ function readRunnerCommands(path) {
 }
 
 async function sendToMonitor(pid, screenIndex = 0) {
-    await waitFor(2000)
-
-    console.log('si', screenIndex)
-
-    // if (screenIndex === 0) return
+    await waitFor(300)
 
     const screen = displays.sort((a, b) => a.left - b.left)[screenIndex] // asc
     if (!screen) throw new Error('Screen not found: ' + screenIndex)
@@ -169,7 +165,7 @@ async function launchBrowser(screenIndex = 0) {
             defaultViewport: null
         })
 
-        await waitFor(2000)
+        // await waitFor(2000)
 
         const page = await browser.newPage()
 
@@ -184,7 +180,7 @@ async function launchBrowser(screenIndex = 0) {
             await sendToMonitor(pid, screenIndex)
         }
 
-        await waitFor(2000)
+        // await waitFor(2000)
 
         return browser
     } catch (error) {
@@ -329,7 +325,7 @@ async function executeRunnerCommands(
             if (!browser) throw new Error('No browser on screen: ' + selectedScreen)
             console.log(selectedScreen,value,value2);
             const page = (await browser.pages())[1]
-            openVideoInTab(page, value,value2)
+            await openVideoInTab(page, value,value2)
 
             continue
         }

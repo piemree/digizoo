@@ -1,30 +1,26 @@
+# connect to masters socket
 SIGNAL_SERVER "http://briefodasi:3000"
 
+# load browser
 SELECT_SCREEN 0
 START_BROWSER
 
-##########################################
+###############################################################################
+# MAIN LOOP
+###############################################################################
 
-TOGO LOOP
+TOGO LAPTOP_LOOP
 
-WAIT_SIGNAL "giris-icin-bekleyin"
-
-LOAD_VIDEO "giris-icin-bekleyin.mp4" 20
-
-WAIT 1000
-
-PLAY_VIDEO
-
-##############################
-
+# load and play you can enter now
 WAIT_SIGNAL "giris-yapabilirsiniz"
-
-LOAD_VIDEO "giris-yapabilirsiniz.mp4"
-
-WAIT 1000
-
+LOAD_VIDEO "giris-yapabilirsiniz.mp4" 20
 PLAY_VIDEO
 
-GOTO LOOP
+WAIT 10s
 
-##############################
+LOAD_VIDEO "giris-icin-bekleyin.mp4" 25
+PLAY_VIDEO
+
+# we do not need to wait here for 25s as the socket will be waited
+
+GOTO LAPTOP_LOOP
