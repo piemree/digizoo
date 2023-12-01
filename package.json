@@ -6,10 +6,8 @@
   "private": true,
   "scripts": {
     "serve": "npx serve web -l 4000 -L",
-    
     "server": "node src/server.js",
     "server:dev": "nodemon src/server.js",
-
     "relay": "node src/relay.js",
     "runner": "node src/runner.js"
   },
@@ -22,7 +20,8 @@
     "getpid": "^1.0.0",
     "puppeteer": "^19.7.2",
     "socket.io": "^4.7.2",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "win-control": "^0.3.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1",

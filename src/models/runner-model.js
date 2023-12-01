@@ -10,6 +10,7 @@ const { waitFor } = require('../utils/wait-for')
 const { computeRelayConfPath, executeRelayConf } = require('./usb-relay-model')
 
 const { ShowChromeScriptPath, SetWindowScriptPath, KillChromeeScriptPath, videoHTML, videoHTMLLink, runnerConfsDir } = require('../parameters')
+const {Window} = require('win-control')
 
 function createVideoHTMLLink(name, counter) {
     return videoHTMLLink + '?video=' + encodeURI(name) + "&counter=" + encodeURI(counter)
@@ -156,14 +157,15 @@ async function killAllChromee() {
     // await waitFor(1000)
 }
 
-async function showChromee() {
-    spawn('powershell.exe', [`. "${ShowChromeScriptPath}";`])
+async function setFore(pid) {
+    Window.getByPid(pid).setForeground()
+    // spawn('powershell.exe', [`. "${ShowChromeScriptPath}";`])
 }
 
 async function launchBrowser(screenIndex = 0) {
     try {
         // retrieve all the PIDs with the name firefox
-        // const pidBlacklist = await getpid('firefox')
+        const pidBlacklist = await getpid('firefox')
 
         const screen = displays.sort((a, b) => a.left - b.left)[screenIndex] // asc
         if (!screen) throw new Error('Screen not found: ' + screenIndex)
@@ -175,7 +177,7 @@ async function launchBrowser(screenIndex = 0) {
             executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
             userDataDir: '.\\UserData' + screenIndex,
             args: [
-                // '--kiosk',
+                '--kiosk',
                 '--start-maximized',
                 '--start-fullscreen',
                 '--disable-infobars',
@@ -201,13 +203,14 @@ async function launchBrowser(screenIndex = 0) {
         // await page.target().createCDPSession();
         await page.target().createCDPSession();
 
-        await showChromee()
+        // await showChromee()
 
         // const pids = await getpid('chrome')
         // const pidWhitelist = pids.filter((pid) => !pidBlacklist.includes(pid))
 
         // for (const pid of pidWhitelist) {
-        //     await sendToMonitor(pid, screenIndex)
+            // await sendToMonitor(pid, screenIndex)
+        await setFore(browser.process().pid)
         // }
 
         // await waitFor(2000)

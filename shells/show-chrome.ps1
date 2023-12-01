@@ -28,4 +28,4 @@ function Show-Window {
 }
   
 # Sample invocation
-Show-Window chrome
+Show-Window Chrome
