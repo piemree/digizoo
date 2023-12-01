@@ -9,7 +9,7 @@ const { io } = require("socket.io-client");
 const { waitFor } = require('../utils/wait-for')
 const { computeRelayConfPath, executeRelayConf } = require('./usb-relay-model')
 
-const { SetWindowScriptPath, videoHTML, videoHTMLLink, runnerConfsDir } = require('../parameters')
+const { SetWindowScriptPath, KillChromeeScriptPath, videoHTML, videoHTMLLink, runnerConfsDir } = require('../parameters')
 
 function createVideoHTMLLink(name, counter) {
     return videoHTMLLink + '?video=' + encodeURI(name) + "&counter=" + encodeURI(counter)
@@ -116,7 +116,8 @@ function readRunnerCommands(path) {
         if (
             command === 'PLAY_VIDEO' ||
             command === 'PAUSE_VIDEO' ||
-            command === 'START_BROWSER'
+            command === 'START_BROWSER' ||
+            command === 'RESTART'
         ) {
             commands.push({
                 type: command,
@@ -128,17 +129,21 @@ function readRunnerCommands(path) {
     return commands
 }
 
-async function sendToMonitor(pid, screenIndex = 0) {
-    await waitFor(300)
+// async function sendToMonitor(pid, screenIndex = 0) {
+//     await waitFor(300)
 
-    const screen = displays.sort((a, b) => a.left - b.left)[screenIndex] // asc
-    if (!screen) throw new Error('Screen not found: ' + screenIndex)
-    const { top, left, width, height } = screen
+//     const screen = displays.sort((a, b) => a.left - b.left)[screenIndex] // asc
+//     if (!screen) throw new Error('Screen not found: ' + screenIndex)
+//     const { top, left, width, height } = screen
 
-    spawn('powershell.exe', [
-        `. "${SetWindowScriptPath}";` +
-        `Set-Window -ProcessId ${pid} -X "${left}" -Y "${top}" -Width ${width} -Height ${height}`
-    ])
+//     spawn('powershell.exe', [
+//         `. "${SetWindowScriptPath}";` +
+//         `Set-Window -ProcessId ${pid} -X "${left}" -Y "${top}" -Width ${width} -Height ${height}`
+//     ])
+// }
+
+async function killAllChromee() {
+    spawn('powershell.exe', [`. "${KillChromeeScriptPath}";`])
 }
 
 async function launchBrowser(screenIndex = 0) {
