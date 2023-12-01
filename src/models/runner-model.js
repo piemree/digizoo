@@ -378,6 +378,8 @@ async function executeRunnerCommands(
 
             const toJump = String(value)
 
+            await page.keyboard.press('d')
+
             for (const char of toJump) {
                 await page.keyboard.press(char)
             }
