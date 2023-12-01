@@ -152,14 +152,14 @@ async function launchBrowser(screenIndex = 0) {
             executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
             userDataDir: '.\\UserData' + screenIndex,
             args: [
-                // '--kiosk',
+                '--kiosk',
                 '--start-maximized',
                 '--start-fullscreen',
                 '--disable-infobars',
                 '--disable-session-crashed-bubble',
                 '--noerrdialogs',
                 '--autoplay-policy=no-user-gesture-required',
-                // `--window-size=${width},${height}", "--window-position=${left + 1},${top}`
+                `--window-position=${left},${top}`
             ],
             ignoreDefaultArgs: [
                 '--enable-blink-features=IdleDetection',
