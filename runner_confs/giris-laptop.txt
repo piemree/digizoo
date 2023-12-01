@@ -16,8 +16,6 @@ WAIT 1000
 SELECT_SCREEN 0
 PLAY_VIDEO
 
-WAIT 20000
-
 ##############################
 
 WAIT_SIGNAL "giris-yapabilirsiniz"
@@ -29,7 +27,5 @@ WAIT 1000
 
 SELECT_SCREEN 0
 PLAY_VIDEO
-
-WAIT 10000
 
 ##############################
