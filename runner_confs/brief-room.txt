@@ -85,19 +85,19 @@ WAIT 10000
 ##############################
 
 SELECT_SCREEN 0
-LOAD_VIDEO "ilerleyin.mp4"
+LOAD_VIDEO "ilerleyin2.mp4"
 
 
 SELECT_SCREEN 1
-LOAD_VIDEO "ilerleyin.mp4"
+LOAD_VIDEO "ilerleyin2.mp4"
 
 
 SELECT_SCREEN 2
-LOAD_VIDEO "ilerleyin.mp4"
+LOAD_VIDEO "ilerleyin2.mp4"
 
 
 SELECT_SCREEN 3
-LOAD_VIDEO "ilerleyin.mp4"
+LOAD_VIDEO "ilerleyin2.mp4"
 
 WAIT 1000
 
