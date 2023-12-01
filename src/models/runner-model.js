@@ -210,6 +210,7 @@ async function waitForSIGNAL(socket, name) {
     await new Promise(resolve => {
         const listener = socket.on('receive', (data) => {
             if (data === name) {
+                // console.log("revieved signal",data);
                 socket.off('receive', listener)
                 resolve()
             }
@@ -220,7 +221,7 @@ async function waitForSIGNAL(socket, name) {
 async function waitForRFID(socket) {
     return new Promise(resolve => {
         const listener = socket.on('receive_rfid', (data) => {
-            console.log('received:', data)
+            // console.log('received:', data)
             socket.off('receive_rfid', listener)
             resolve(data)
         })
@@ -261,6 +262,7 @@ async function executeRunnerCommands(
         }
 
         if (type === 'WAIT_SIGNAL') {
+            console.log('waiting for signal:', value)
             await waitForSIGNAL(socket, value)
             continue
         }
@@ -325,7 +327,7 @@ async function executeRunnerCommands(
             if (!selectedScreen && selectedScreen !== 0) throw new Error('No screen selected')
             const browser = screen2Browser[selectedScreen]
             if (!browser) throw new Error('No browser on screen: ' + selectedScreen)
-
+            console.log(selectedScreen,value,value2);
             const page = (await browser.pages())[1]
             openVideoInTab(page, value,value2)
 
