@@ -51,69 +51,55 @@ PLAY_VIDEO
 WAIT 10s
 
 ###############################################################################
-# 
+# play main video
 ###############################################################################
 
-SIGNAL "giris-icin-bekleyin"
-
-#SELECT_SCREEN 0
-#LOAD_VIDEO "video1.mp4"
-
-#SELECT_SCREEN 1
-#LOAD_VIDEO "video2.mp4"
-
+SELECT_SCREEN 0
+LOAD_VIDEO "video1.mp4"
+SELECT_SCREEN 1
+LOAD_VIDEO "video2.mp4"
 SELECT_SCREEN 2
 LOAD_VIDEO "video3.mp4"
+SELECT_SCREEN 3
+LOAD_VIDEO "video4.mp4"
 
-#SELECT_SCREEN 3
-#LOAD_VIDEO "video4.mp4"
-
-WAIT 1000
-
-#SELECT_SCREEN 0
-#PLAY_VIDEO
-
-#SELECT_SCREEN 1
-#PLAY_VIDEO
-
+SELECT_SCREEN 0
+PLAY_VIDEO
+SELECT_SCREEN 1
+PLAY_VIDEO
 SELECT_SCREEN 2
 PLAY_VIDEO
+SELECT_SCREEN 3
+PLAY_VIDEO
 
-#SELECT_SCREEN 3
-#PLAY_VIDEO
+# this is the duration of the main video
+WAIT 15s
 
-WAIT 15000
+###############################################################################
+# ilerleyin
+###############################################################################
 
-##############################
-
-#SELECT_SCREEN 0
-#LOAD_VIDEO "ilerleyin720.mp4"
-
-#SELECT_SCREEN 1
-#LOAD_VIDEO "ilerleyin720.mp4"
-
+SELECT_SCREEN 0
+LOAD_VIDEO "ilerleyin720.mp4"
+SELECT_SCREEN 1
+LOAD_VIDEO "ilerleyin720.mp4"
 SELECT_SCREEN 2
 LOAD_VIDEO "ilerleyin720.mp4"
+SELECT_SCREEN 3
+LOAD_VIDEO "ilerleyin720.mp4"
 
-#SELECT_SCREEN 3
-#LOAD_VIDEO "ilerleyin720.mp4"
-
-WAIT 1000
-
-#SELECT_SCREEN 0
-#PLAY_VIDEO
-
-#SELECT_SCREEN 1
-#PLAY_VIDEO
-
+SELECT_SCREEN 0
+PLAY_VIDEO
+SELECT_SCREEN 1
+PLAY_VIDEO
 SELECT_SCREEN 2
 PLAY_VIDEO
+SELECT_SCREEN 3
+PLAY_VIDEO
 
-#SELECT_SCREEN 3
-#PLAY_VIDEO
+WAIT 10s
 
-WAIT 10000
-
+# go back to main loop
 GOTO BRIEF_START
 
-##############################
+###############################################################################
