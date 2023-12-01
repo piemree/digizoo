@@ -71,13 +71,13 @@
                     $runners.find('option').remove().end()
 
                     for (const runner of runners) {
-                        const option = $('<option></option>').attr('value', runner).text(runner)
-                        option.click(function (e) {
-                            console.log("runner val",e.target.value);
-                            localStorage.setItem("runner",e.target.value)
-                        })
-                        $runners.append(option);
+                        const $option = $('<option></option>').attr('value', runner).text(runner)
+                        $runners.append($option);
                     }
+
+                    $runners.on('change', function() {
+                        localStorage.setItem("runner", this.value)
+                    });
 
                     const lastSelectedRunner = localStorage.getItem("runner")
                     if (lastSelectedRunner) {

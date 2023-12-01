@@ -234,8 +234,9 @@ async function waitForSIGNAL(socket, name) {
 }
 
 async function waitForRFID(socket) {
-    await new Promise(resolve => {
+    return new Promise(resolve => {
         const listener = socket.on('receive_rfid', (data) => {
+            console.log('received:', data)
             socket.off('receive_rfid', listener)
             resolve(data)
         })
@@ -282,9 +283,10 @@ async function executeRunnerCommands(
 
         if (type === 'WAIT_RFID') {
             const rfid = await waitForRFID(socket)
+            console.log('rfidread:', rfid)
             const TOGO = map[rfid]
             executeRunnerCommands(commands, TOGO, selectedScreen, selectedBoard, screen2Browser, selectedSocketServer)
-            continue
+            break
         }
 
         if (type === 'SIGNAL') {
