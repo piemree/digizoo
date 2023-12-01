@@ -9,7 +9,7 @@ const { io } = require("socket.io-client");
 const { waitFor } = require('../utils/wait-for')
 const { computeRelayConfPath, executeRelayConf } = require('./usb-relay-model')
 
-const { SetWindowScriptPath, KillChromeeScriptPath, videoHTML, videoHTMLLink, runnerConfsDir } = require('../parameters')
+const { ShowChromeScriptPath, SetWindowScriptPath, KillChromeeScriptPath, videoHTML, videoHTMLLink, runnerConfsDir } = require('../parameters')
 
 function createVideoHTMLLink(name, counter) {
     return videoHTMLLink + '?video=' + encodeURI(name) + "&counter=" + encodeURI(counter)
@@ -156,6 +156,10 @@ async function killAllChromee() {
     // await waitFor(1000)
 }
 
+async function showChromee() {
+    spawn('powershell.exe', [`. "${ShowChromeScriptPath}";`])
+}
+
 async function launchBrowser(screenIndex = 0) {
     try {
         // retrieve all the PIDs with the name firefox
@@ -188,8 +192,7 @@ async function launchBrowser(screenIndex = 0) {
             defaultViewport: null
         })
 
-        BROWSERS.push(browser)
-
+        // BROWSERS.push(browser)
         // await waitFor(2000)
 
         const page = await browser.newPage()
@@ -197,6 +200,8 @@ async function launchBrowser(screenIndex = 0) {
         // const page = (await browser.pages())[0]
         // await page.target().createCDPSession();
         await page.target().createCDPSession();
+
+        await showChromee()
 
         // const pids = await getpid('chrome')
         // const pidWhitelist = pids.filter((pid) => !pidBlacklist.includes(pid))
