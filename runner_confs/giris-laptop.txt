@@ -5,6 +5,7 @@ START_BROWSER
 
 ##########################################
 
+TOGO LOOP
 
 WAIT_SIGNAL "giris-icin-bekleyin"
 
@@ -27,5 +28,7 @@ WAIT 1000
 
 SELECT_SCREEN 0
 PLAY_VIDEO
+
+GOTO LOOP
 
 ##############################
