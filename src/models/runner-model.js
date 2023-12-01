@@ -142,8 +142,18 @@ function readRunnerCommands(path) {
 //     ])
 // }
 
+let BROWSERS = []
+
 async function killAllChromee() {
-    spawn('powershell.exe', [`. "${KillChromeeScriptPath}";`])
+    for (const browser of BROWSERS) {
+        if (browser) {
+            browser.close()
+        }
+    }
+
+    BROWSERS = []
+    // spawn('powershell.exe', [`. "${KillChromeeScriptPath}";`])
+    // await waitFor(1000)
 }
 
 async function launchBrowser(screenIndex = 0) {
@@ -176,6 +186,8 @@ async function launchBrowser(screenIndex = 0) {
             ],
             defaultViewport: null
         })
+
+        BROWSERS.push(browser)
 
         // await waitFor(2000)
 
@@ -257,6 +269,10 @@ async function executeRunnerCommands(
             } else {
                 continue
             }
+        }
+
+        if (type === 'RESTART') {
+            await killAllChromee()
         }
 
         if (type === 'GOTO') {
