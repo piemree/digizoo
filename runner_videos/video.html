@@ -24,7 +24,7 @@
 </head>
 
 <body>
-    <video id="video"></video>
+    <video id="video" autoplay loop playsinline></video>
 
     <script src="./jquery.min.js"></script>
     <script src="./socket.io.min.js"></script>
@@ -36,7 +36,8 @@
             var $video = $("#video")
 
             function retrieveParam(name) {
-                return (location.search.split(name + '=')[1] || '').split('&')[0];
+                const url = new URL(window.location.href);
+                return url.searchParams.get(name);
             }
 
             const videoName = retrieveParam('video');
@@ -71,14 +72,14 @@
 
             $video.attr('src', './' + videoName);
 
-            var $v = document.getElementById('video');
+            // var $v = document.getElementById('video');
 
-            $v.addEventListener('ended', function() {
-                this.currentTime = 0;
-                this.play();
-            }, false);
+            // $v.addEventListener('ended', function() {
+            //     this.currentTime = 0;
+            //     this.play();
+            // }, false);
 
-            $v.play();
+            // $v.play();
 
             var isToJump = false
             var toJump = ''
