@@ -35,17 +35,8 @@ LOAD_VIDEO "baslamaya720.mp4" 10
 SELECT_SCREEN 3
 LOAD_VIDEO "baslamaya720.mp4" 10
 
-# wait videos to be loaded and then play them
-# WAIT 1s
-
-# SELECT_SCREEN 0
-# PLAY_VIDEO
-# SELECT_SCREEN 1
-# PLAY_VIDEO
-# SELECT_SCREEN 2
-# PLAY_VIDEO
-# SELECT_SCREEN 3
-# PLAY_VIDEO
+# extra wait for the videos to be loaded
+WAIT 1s
 
 # this is the duration of the first video
 WAIT 10s
