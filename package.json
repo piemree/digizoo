@@ -6,8 +6,10 @@
   "private": true,
   "scripts": {
     "serve": "npx serve web -l 4000 -L",
+    
     "server": "node src/server.js",
     "server:dev": "nodemon src/server.js",
+
     "relay": "node src/relay.js",
     "runner": "node src/runner.js"
   },
