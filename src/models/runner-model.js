@@ -147,7 +147,7 @@ let BROWSERS = []
 async function killAllChromee() {
     for (const browser of BROWSERS) {
         if (browser) {
-            browser.close()
+            await browser.close()
         }
     }
 
@@ -272,7 +272,8 @@ async function executeRunnerCommands(
         }
 
         if (type === 'RESTART') {
-            await killAllChromee()
+            // await killAllChromee()
+            continue
         }
 
         if (type === 'GOTO') {
