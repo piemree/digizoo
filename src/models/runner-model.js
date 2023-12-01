@@ -209,7 +209,7 @@ async function retrieveAnActiveSocketConnection(server = 'http://localhost:3000'
 async function waitForSIGNAL(socket, name) {
     await new Promise(resolve => {
         const listener = socket.on('trigger', (data) => {
-            console.log("recieved signal", data);
+            console.log("trigger recieved ",value);
             if (data === name) {
                 // socket.off('trigger', listener)
                 resolve()
@@ -275,6 +275,7 @@ async function executeRunnerCommands(
         }
 
         if (type === 'SIGNAL') {
+            console.log("trigger send ",value);
             socket.emit('trigger', value)
             continue
         }
