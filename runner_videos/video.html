@@ -27,9 +27,13 @@
     <video id="video" loop></video>
 
     <script src="./jquery.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
     <script>
         $(function () {
-            $video = $("#video")
+            const socket = io('http://127.0.0.1:3000');
+
+            var rfidCode = ''
+            var $video = $("#video")
 
             function retrieveParam(name) {
                 return (location.search.split(name + '=')[1] || '').split('&')[0];
@@ -62,16 +66,14 @@
                     id="counter">${counter}</span>`
                     $("body").append(counterElement);
                 }, 1000)
-
-
             }
 
             $video.attr('src', './' + videoName);
 
+            var isToJump = false
             var toJump = ''
 
             $(document).on('keypress', function (e) {
-                console.log(e)
                 if (e.code === 'KeyR') {
                     $video.trigger('play');
                 }
@@ -83,13 +85,31 @@
                 if (e.code === 'KeyJ') {
                     document.getElementById('video').currentTime = parseFloat(toJump)
                     toJump = ''
+                    isToJump = false
+                }
+
+                if (e.code === 'KeyD') {
+                    isToJump = true
+                    toJump = ''
                 }
 
                 if (
                     (e.keyCode >= 48 && e.keyCode <= 57) ||
                     (e.key === '.')
                 ) {
-                    toJump += e.key
+                    if (isToJump) {
+                        toJump += e.key
+                    } else {
+                        rfidCode += e.key
+                    }
+                }
+
+                if (e.code === 'Enter') {
+                    // emit rfid data to localhost
+                    socket.emit('send_rfid', rfidCode)
+                    console.log(rfidCode)
+                    rfidCode = ''
+                    isToJump = false
                 }
             });
         })

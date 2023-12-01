@@ -103,13 +103,29 @@ function readRunnerCommands(path) {
             command === 'SIGNAL_SERVER' ||
             command === 'LOG'
         ) {
-
             commands.push({
                 type: command,
                 value: parseStr(params[0]),
                 value2: parseInt(params[1])
             })
             continue
+        }
+
+        if (command === 'WAIT_RFID') {
+            const unparsed = parseStr(params[0])
+            const items = unparsed.split('|')
+            const map = {}
+
+            for (const item of items) {
+                const [rfid, point] = item.split(':')
+                map[rfid] = point
+            }
+
+            commands.push({
+                type: command,
+                value: unparsed,
+                map: map
+            })
         }
 
         if (
@@ -217,6 +233,15 @@ async function waitForSIGNAL(socket, name) {
     })
 }
 
+async function waitForRFID(socket) {
+    await new Promise(resolve => {
+        const listener = socket.on('receive_rfid', (data) => {
+            socket.off('receive_rfid', listener)
+            resolve(data)
+        })
+    })
+}
+
 async function executeRunnerCommands(
     commands,
     GOTO = null,
@@ -226,7 +251,7 @@ async function executeRunnerCommands(
     selectedSocketServer = 'http://localhost:3000'
 ) {
     for (const command of commands) {
-        const { type, value, value2 } = command
+        const { type, value, map, value2 } = command
         const socket = await retrieveAnActiveSocketConnection(selectedSocketServer)
 
         if (GOTO !== null) {
@@ -241,7 +266,7 @@ async function executeRunnerCommands(
         }
 
         if (type === 'GOTO') {
-            executeRunnerCommands(commands, value, selectedScreen, selectedBoard, screen2Browser)
+            executeRunnerCommands(commands, value, selectedScreen, selectedBoard, screen2Browser, selectedSocketServer)
             break
         }
 
@@ -252,6 +277,13 @@ async function executeRunnerCommands(
 
         if (type === 'WAIT_SIGNAL') {
             await waitForSIGNAL(socket, value)
+            continue
+        }
+
+        if (type === 'WAIT_RFID') {
+            const rfid = await waitForRFID(socket)
+            const TOGO = map[rfid]
+            executeRunnerCommands(commands, TOGO, selectedScreen, selectedBoard, screen2Browser, selectedSocketServer)
             continue
         }
 
