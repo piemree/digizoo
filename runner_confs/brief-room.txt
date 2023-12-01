@@ -14,6 +14,8 @@ START_BROWSER
 
 TOGO BRIEF_START
 
+SIGNAL "giris-yapabilirsiniz"
+
 SELECT_SCREEN 0
 LOAD_VIDEO "baslamaya2.mp4" 10
 
@@ -48,6 +50,8 @@ WAIT 10000
 
 ##############################
 
+SIGNAL "giris-icin-bekleyin"
+
 SELECT_SCREEN 0
 LOAD_VIDEO "video1.mp4"
 
@@ -77,8 +81,6 @@ PLAY_VIDEO
 
 SELECT_SCREEN 3
 PLAY_VIDEO
-
-SIGNAL "giris-icin-bekleyin"
 
 WAIT 15000
 
@@ -114,8 +116,6 @@ SELECT_SCREEN 3
 PLAY_VIDEO
 
 WAIT 10000
-
-SIGNAL "giris-yapabilirsiniz"
 
 GOTO BRIEF_START
 
