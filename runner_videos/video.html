@@ -24,7 +24,7 @@
 </head>
 
 <body>
-    <video id="video" loop autoplay></video>
+    <video id="video" loop></video>
 
     <script src="./jquery.min.js"></script>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
@@ -41,6 +41,7 @@
 
             const videoName = retrieveParam('video');
             const counterParam = retrieveParam('counter');
+            
             let counter = null
             if (counterParam && !isNaN(counterParam)) {
                 $("body").css("min-height","100vh");
@@ -69,6 +70,7 @@
             }
 
             $video.attr('src', './' + videoName);
+            document.getElementById('video').play();
 
             var isToJump = false
             var toJump = ''
