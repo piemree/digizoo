@@ -24,10 +24,10 @@
 </head>
 
 <body>
-    <video id="video"></video>
+    <video id="video" autoplay loop playsinline></video>
 
     <script src="./jquery.min.js"></script>
-    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
+    <script src="./socket.io.min.js"></script>
     <script>
         $(function () {
             const socket = io('http://127.0.0.1:3000');
@@ -36,7 +36,8 @@
             var $video = $("#video")
 
             function retrieveParam(name) {
-                return (location.search.split(name + '=')[1] || '').split('&')[0];
+                const url = new URL(window.location.href);
+                return url.searchParams.get(name);
             }
 
             const videoName = retrieveParam('video');
@@ -71,14 +72,14 @@
 
             $video.attr('src', './' + videoName);
 
-            var $v = document.getElementById('video');
+            // var $v = document.getElementById('video');
 
-            $v.addEventListener('ended', function() {
-                this.currentTime = 0;
-                this.play();
-            }, false);
+            // $v.addEventListener('ended', function() {
+            //     this.currentTime = 0;
+            //     this.play();
+            // }, false);
 
-            $v.play();
+            // $v.play();
 
             var isToJump = false
             var toJump = ''

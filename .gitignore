@@ -2,11 +2,8 @@
 ## Custom ##
 ######################################################################
 
+/UserData
 /lib
-/api-dist
-/mobile
-/mobile-v2
-/purplebook
 
 dist
 

@@ -12,7 +12,7 @@ const { computeRelayConfPath, executeRelayConf } = require('./usb-relay-model')
 const { SetWindowScriptPath, videoHTML, videoHTMLLink, runnerConfsDir } = require('../parameters')
 
 function createVideoHTMLLink(name, counter) {
-    return videoHTMLLink + '?video=' + encodeURI(name) + "?counter=" + encodeURI(counter)
+    return videoHTMLLink + '?video=' + encodeURI(name) + "&counter=" + encodeURI(counter)
 }
 
 async function openVideoInTab(tab, name, counter) {
@@ -133,7 +133,6 @@ async function sendToMonitor(pid, screenIndex = 0) {
 
     const screen = displays.sort((a, b) => a.left - b.left)[screenIndex] // asc
     if (!screen) throw new Error('Screen not found: ' + screenIndex)
-
     const { top, left, width, height } = screen
 
     spawn('powershell.exe', [
@@ -145,24 +144,31 @@ async function sendToMonitor(pid, screenIndex = 0) {
 async function launchBrowser(screenIndex = 0) {
     try {
         // retrieve all the PIDs with the name firefox
-        const pidBlacklist = await getpid('firefox')
+        // const pidBlacklist = await getpid('firefox')
+
+        const screen = displays.sort((a, b) => a.left - b.left)[screenIndex] // asc
+        if (!screen) throw new Error('Screen not found: ' + screenIndex)
+        const { top, left, width, height } = screen
 
         const browser = await puppeteer.launch({
             headless: false,
-            product: 'firefox',
+            product: 'chrome',
+            executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+            userDataDir: '.\\UserData',
             args: [
-                // '--start-maximized',
-                // '--start-fullscreen',
-                '--kiosk',
-                // '--disable-infobars',
-                // '--disable-session-crashed-bubble',
-                // '--noerrdialogs',
-                // '--display=:1.1'
+                // '--kiosk',
+                '--start-maximized',
+                '--start-fullscreen',
+                '--disable-infobars',
+                '--disable-session-crashed-bubble',
+                '--noerrdialogs',
+                '--autoplay-policy=no-user-gesture-required',
+                `--window-size=${width},${height}", "--window-position=${top},${left}`
             ],
-            // ignoreDefaultArgs: [
-            //     '--enable-blink-features=IdleDetection',
-            //     '--enable-automation'
-            // ],
+            ignoreDefaultArgs: [
+                '--enable-blink-features=IdleDetection',
+                '--enable-automation'
+            ],
             defaultViewport: null
         })
 
@@ -174,12 +180,12 @@ async function launchBrowser(screenIndex = 0) {
         // await page.target().createCDPSession();
         await page.target().createCDPSession();
 
-        const pids = await getpid('firefox')
-        const pidWhitelist = pids.filter((pid) => !pidBlacklist.includes(pid))
+        // const pids = await getpid('firefox')
+        // const pidWhitelist = pids.filter((pid) => !pidBlacklist.includes(pid))
 
-        for (const pid of pidWhitelist) {
-            await sendToMonitor(pid, screenIndex)
-        }
+        // for (const pid of pidWhitelist) {
+        //     await sendToMonitor(pid, screenIndex)
+        // }
 
         // await waitFor(2000)
 
@@ -324,12 +330,15 @@ async function executeRunnerCommands(
             if (!selectedScreen && selectedScreen !== 0) throw new Error('No screen selected')
             const browser = screen2Browser[selectedScreen]
             if (!browser) throw new Error('No browser on screen: ' + selectedScreen)
-            console.log(selectedScreen,value,value2);
+        
+            console.log('loadvid:', selectedScreen, value, value2);
+
             const page = (await browser.pages())[1]
-            openVideoInTab(page, value, value2)
-            waitFor(1000).then(() => {
-                page.keyboard.press('r') // play video
-            })
+            await openVideoInTab(page, value, value2)
+
+            // waitFor(1000).then(() => {
+                //     page.keyboard.press('r') // play video
+            // })
 
             continue
         }
