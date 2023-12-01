@@ -129,7 +129,7 @@ function readRunnerCommands(path) {
 }
 
 async function sendToMonitor(pid, screenIndex = 0) {
-    await waitFor(300)
+    // await waitFor(300)
 
     const screen = displays.sort((a, b) => a.left - b.left)[screenIndex] // asc
     if (!screen) throw new Error('Screen not found: ' + screenIndex)
@@ -144,11 +144,7 @@ async function sendToMonitor(pid, screenIndex = 0) {
 async function launchBrowser(screenIndex = 0) {
     try {
         // retrieve all the PIDs with the name firefox
-        // const pidBlacklist = await getpid('firefox')
-
-        const screen = displays.sort((a, b) => a.left - b.left)[screenIndex] // asc
-        if (!screen) throw new Error('Screen not found: ' + screenIndex)
-        const { top, left, width, height } = screen
+        const pidBlacklist = await getpid('firefox')
 
         const browser = await puppeteer.launch({
             headless: false,
@@ -163,7 +159,7 @@ async function launchBrowser(screenIndex = 0) {
                 '--disable-session-crashed-bubble',
                 '--noerrdialogs',
                 '--autoplay-policy=no-user-gesture-required',
-                `--window-size=${width},${height}", "--window-position=${left + 1},${top}`
+                // `--window-size=${width},${height}", "--window-position=${left + 1},${top}`
             ],
             ignoreDefaultArgs: [
                 '--enable-blink-features=IdleDetection',
@@ -180,12 +176,12 @@ async function launchBrowser(screenIndex = 0) {
         // await page.target().createCDPSession();
         await page.target().createCDPSession();
 
-        // const pids = await getpid('firefox')
-        // const pidWhitelist = pids.filter((pid) => !pidBlacklist.includes(pid))
+        const pids = await getpid('chrome')
+        const pidWhitelist = pids.filter((pid) => !pidBlacklist.includes(pid))
 
-        // for (const pid of pidWhitelist) {
-        //     await sendToMonitor(pid, screenIndex)
-        // }
+        for (const pid of pidWhitelist) {
+            await sendToMonitor(pid, screenIndex)
+        }
 
         // await waitFor(2000)
 
