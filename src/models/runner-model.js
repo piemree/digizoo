@@ -327,8 +327,9 @@ async function executeRunnerCommands(
             console.log(selectedScreen,value,value2);
             const page = (await browser.pages())[1]
             openVideoInTab(page, value, value2)
-            await waitFor(1000)
-            await page.keyboard.press('r') // play video
+            waitFor(1000).then(() => {
+                page.keyboard.press('r') // play video
+            })
 
             continue
         }

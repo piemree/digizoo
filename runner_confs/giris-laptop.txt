@@ -17,13 +17,9 @@ WAIT_SIGNAL "giris-yapabilirsiniz"
 LOAD_VIDEO "giris-yapabilirsiniz.mp4" 20
 
 # wait for the video to finish
-WAIT 10s
+WAIT 20s
 
 LOAD_VIDEO "giris-icin-bekleyin.mp4" 25
-
-# wait for video to be loaded
-# WAIT 1s
-# PLAY_VIDEO
 
 # we do not need to wait here for 25s as the socket will be waited
 GOTO LAPTOP_LOOP
