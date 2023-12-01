@@ -129,7 +129,7 @@ function readRunnerCommands(path) {
 }
 
 async function sendToMonitor(pid, screenIndex = 0) {
-    // await waitFor(300)
+    await waitFor(300)
 
     const screen = displays.sort((a, b) => a.left - b.left)[screenIndex] // asc
     if (!screen) throw new Error('Screen not found: ' + screenIndex)
