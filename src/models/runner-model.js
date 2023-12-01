@@ -16,7 +16,7 @@ function createVideoHTMLLink(name, counter) {
 }
 
 async function openVideoInTab(tab, name, counter) {
-    await tab.goto(
+    tab.goto(
         createVideoHTMLLink(name, counter),
         { waitUntil: 'domcontentloaded', timeout: 0 }
     )
@@ -325,7 +325,7 @@ async function executeRunnerCommands(
             if (!browser) throw new Error('No browser on screen: ' + selectedScreen)
             console.log(selectedScreen,value,value2);
             const page = (await browser.pages())[1]
-            await openVideoInTab(page, value,value2)
+            openVideoInTab(page, value,value2)
 
             continue
         }
