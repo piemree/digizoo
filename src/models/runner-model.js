@@ -21,7 +21,6 @@ async function openVideoInTab(tab, name, counter) {
         createVideoHTMLLink(name, counter),
         { waitUntil: 'domcontentloaded', timeout: 0 }
     )
-    console.log('selam')
 }
 
 function computeRunnerPath(name) {
@@ -94,6 +93,8 @@ function readRunnerCommands(path) {
             })
             continue
         }
+
+        // if (command === 'MAP_SIGNAL') {}
 
         if (
             command === 'RUN_RELAY' ||
@@ -228,7 +229,10 @@ let _socketConnected = false
 async function retrieveAnActiveSocketConnection(server = 'http://localhost:3000') {
     return new Promise((resolve) => {
         if (!_sockets[server]) {
-            _sockets[server] = io(server)
+            _sockets[server] = io(server, {
+                reconnection: true,
+                forceNew: true
+            })
             console.log('[INFO] Created a new socket instance')
         }
         resolve(_sockets[server])
@@ -296,7 +300,6 @@ async function executeRunnerCommands(
         }
 
         if (type === 'WAIT_SIGNAL') {
-            console.log('waiting for signal:', value)
             await waitForSIGNAL(socket, value)
             continue
         }
@@ -362,8 +365,6 @@ async function executeRunnerCommands(
             const browser = screen2Browser[selectedScreen]
             if (!browser) throw new Error('No browser on screen: ' + selectedScreen)
         
-            console.log('loadvid:', selectedScreen, value, value2);
-
             const page = (await browser.pages())[1]
             await openVideoInTab(page, value, value2)
 

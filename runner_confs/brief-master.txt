@@ -16,6 +16,7 @@ START_BROWSER
 SELECT_SCREEN 3
 START_BROWSER
 
+# just to make sure
 WAIT 5s
 
 ###############################################################################
@@ -23,7 +24,7 @@ WAIT 5s
 ###############################################################################
 TOGO BRIEF_START
 
-SIGNAL "giris-yapabilirsiniz"
+SIGNAL "brief-enter"
 
 # load videos
 SELECT_SCREEN 0
@@ -34,9 +35,6 @@ SELECT_SCREEN 2
 LOAD_VIDEO "baslamaya720.mp4" 10
 SELECT_SCREEN 3
 LOAD_VIDEO "baslamaya720.mp4" 10
-
-# extra wait for the videos to be loaded
-# WAIT 1s
 
 # this is the duration of the first video
 WAIT 10s
@@ -54,18 +52,6 @@ LOAD_VIDEO "video3.mp4"
 SELECT_SCREEN 3
 LOAD_VIDEO "video4.mp4"
 
-# wait for videos to be loaded
-# WAIT 1s
-
-# SELECT_SCREEN 0
-# PLAY_VIDEO
-# SELECT_SCREEN 1
-# PLAY_VIDEO
-# SELECT_SCREEN 2
-# PLAY_VIDEO
-# SELECT_SCREEN 3
-# PLAY_VIDEO
-
 # this is the duration of the main video
 WAIT 15s
 
@@ -81,18 +67,6 @@ SELECT_SCREEN 2
 LOAD_VIDEO "ilerleyin720.mp4"
 SELECT_SCREEN 3
 LOAD_VIDEO "ilerleyin720.mp4"
-
-# wait for videos to be loaded
-WAIT 1s
-
-SELECT_SCREEN 0
-PLAY_VIDEO
-SELECT_SCREEN 1
-PLAY_VIDEO
-SELECT_SCREEN 2
-PLAY_VIDEO
-SELECT_SCREEN 3
-PLAY_VIDEO
 
 WAIT 10s
 
