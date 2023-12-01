@@ -9,24 +9,20 @@ TOGO LOOP
 
 WAIT_SIGNAL "giris-icin-bekleyin"
 
-SELECT_SCREEN 0
 LOAD_VIDEO "giris-icin-bekleyin.mp4" 20
 
 WAIT 1000
 
-SELECT_SCREEN 0
 PLAY_VIDEO
 
 ##############################
 
 WAIT_SIGNAL "giris-yapabilirsiniz"
 
-SELECT_SCREEN 0
 LOAD_VIDEO "giris-yapabilirsiniz.mp4"
 
 WAIT 1000
 
-SELECT_SCREEN 0
 PLAY_VIDEO
 
 GOTO LOOP
