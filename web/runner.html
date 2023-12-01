@@ -59,15 +59,13 @@
 
     <script>
         $(function () {
-            const REMOTE_HOST = 'localhost' // briefodasi
-
             const $runners = $('#runners')
             const $seconds = $('#seconds')
             const $isactive = $('#isactive')
             const $button = $('#button')
 
             function retrieveRunners() {
-                $.get(`http://${REMOTE_HOST}:3000/retrieve-runners`, (runners) => {
+                $.get('http://briefodasi:3000/retrieve-runners', (runners) => {
                     $runners.find('option').remove().end()
 
                     for (const runner of runners) {
@@ -102,7 +100,7 @@
 
             function executeSelectedRunner() {
                 $.ajax({
-                    url: `http://${REMOTE_HOST}:3000/execute-runner`,
+                    url: 'http://briefodasi:3000/execute-runner',
                     type: 'POST',
                     dataType: 'json',
                     contentType: 'application/json; charset=utf-8',

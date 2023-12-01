@@ -24,23 +24,22 @@
 </head>
 
 <body>
-    <video id="video" loop></video>
 
+    <h1>
+        TESTSETSETSET
+    </h1>
     <script src="./jquery.min.js"></script>
     <script>
         $(function () {
-            $video = $("#video")
-
             function retrieveParam(name) {
                 return (location.search.split(name + '=')[1] || '').split('&')[0];
             }
 
-            const videoName = retrieveParam('video');
             const counterParam = retrieveParam('counter');
             let counter = null
             if (counterParam && !isNaN(counterParam)) {
-                $("body").css("min-height","100vh");
-                $("body").css("position","relative");
+                $("body").css("min-height", "100vh");
+                $("body").css("position", "relative");
                 counter = parseInt(counterParam)
                 setInterval(() => {
                     if (counter === 0) return
@@ -66,32 +65,6 @@
 
             }
 
-            $video.attr('src', './' + videoName);
-
-            var toJump = ''
-
-            $(document).on('keypress', function (e) {
-                console.log(e)
-                if (e.code === 'KeyR') {
-                    $video.trigger('play');
-                }
-
-                if (e.code === 'KeyP') {
-                    $video.trigger('pause');
-                }
-
-                if (e.code === 'KeyJ') {
-                    document.getElementById('video').currentTime = parseFloat(toJump)
-                    toJump = ''
-                }
-
-                if (
-                    (e.keyCode >= 48 && e.keyCode <= 57) ||
-                    (e.key === '.')
-                ) {
-                    toJump += e.key
-                }
-            });
         })
     </script>
 </body>
