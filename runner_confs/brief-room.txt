@@ -80,7 +80,7 @@ PLAY_VIDEO
 
 SIGNAL "giris-icin-bekleyin"
 
-WAIT 10000
+WAIT 15000
 
 ##############################
 
