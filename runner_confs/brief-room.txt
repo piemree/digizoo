@@ -1,52 +1,58 @@
-#SELECT_SCREEN 0
-#START_BROWSER
+###############################################################################
+# START BROWSERS
+###############################################################################
+SELECT_SCREEN 0
+START_BROWSER
 
-#SELECT_SCREEN 1
-#START_BROWSER
+SELECT_SCREEN 1
+START_BROWSER
 
 SELECT_SCREEN 2
 START_BROWSER
 
-#SELECT_SCREEN 3
-#START_BROWSER
+SELECT_SCREEN 3
+START_BROWSER
 
-##########################################
+LOG "successfully started all the browsers"
 
-WAIT 5000
+# todo increase this to 30s
+WAIT 5s
 
+###############################################################################
+# MAIN LOOP START
+###############################################################################
 TOGO BRIEF_START
 
 SIGNAL "giris-yapabilirsiniz"
 
-#SELECT_SCREEN 0
-#LOAD_VIDEO "baslamaya720.mp4" 10
-
-#SELECT_SCREEN 1
-#LOAD_VIDEO "baslamaya720.mp4" 10
-
+# load videos
+SELECT_SCREEN 0
+LOAD_VIDEO "baslamaya720.mp4" 10
+SELECT_SCREEN 1
+LOAD_VIDEO "baslamaya720.mp4" 10
 SELECT_SCREEN 2
 LOAD_VIDEO "baslamaya720.mp4" 10
+SELECT_SCREEN 3
+LOAD_VIDEO "baslamaya720.mp4" 10
 
-#SELECT_SCREEN 3
-#LOAD_VIDEO "baslamaya720.mp4" 10
+# wait videos to be loaded and then play them
+# WAIT 1000
 
-WAIT 1000
-
-#SELECT_SCREEN 0
-#PLAY_VIDEO
-
-#SELECT_SCREEN 1
-#PLAY_VIDEO
-
+SELECT_SCREEN 0
+PLAY_VIDEO
+SELECT_SCREEN 1
+PLAY_VIDEO
 SELECT_SCREEN 2
 PLAY_VIDEO
+SELECT_SCREEN 3
+PLAY_VIDEO
 
-#SELECT_SCREEN 3
-#PLAY_VIDEO
+# this is the duration of the first video
+WAIT 10s
 
-WAIT 10000
-
-##############################
+###############################################################################
+# 
+###############################################################################
 
 SIGNAL "giris-icin-bekleyin"
 
