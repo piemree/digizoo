@@ -1,15 +1,7 @@
 // server related
-var cors = require('cors')
 const app = require('express')()
-
-// app.use(cors())
-
 const server = require('http').createServer(app)
-const io = require('socket.io')(server, {
-    cors: {
-        origin: '*',
-    }
-})
+const io = require('socket.io')(server)
 
 const bodyParser = require('body-parser')
 const path = require('path')
@@ -32,10 +24,6 @@ io.on('connection', (socket) => {
     socket.on('send', (data) => {
         console.log(`[IO] Server received and sent the SIGNAL "${data}"`)
         io.emit('receive', data)
-    })
-
-    socket.on('send_rfid', (data) => {
-        io.emit('receive_rfid', data)
     })
     
     socket.on('disconnect', function () {
