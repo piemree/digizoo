@@ -15,16 +15,16 @@ START_BROWSER
 TOGO BRIEF_START
 
 SELECT_SCREEN 0
-LOAD_VIDEO "baslamaya.mp4" 10
+LOAD_VIDEO "brief-enter.mp4" 10
 
 SELECT_SCREEN 1
-LOAD_VIDEO "baslamaya.mp4" 10
+LOAD_VIDEO "brief-enter.mp4" 10
 
 SELECT_SCREEN 2
-LOAD_VIDEO "baslamaya.mp4" 10
+LOAD_VIDEO "brief-enter.mp4" 10
 
 SELECT_SCREEN 3
-LOAD_VIDEO "baslamaya.mp4" 10
+LOAD_VIDEO "brief-enter.mp4" 10
 
 
 
