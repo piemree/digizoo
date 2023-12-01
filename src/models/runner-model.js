@@ -207,6 +207,8 @@ async function retrieveAnActiveSocketConnection(server = 'http://localhost:3000'
 }
 
 async function waitForSIGNAL(socket, name) {
+    console.log("trigger socket ",socket);
+    console.log("trigger name ",name);
     await new Promise(resolve => {
         const listener = socket.on('trigger', (data) => {
             console.log("trigger recieved ",value);
