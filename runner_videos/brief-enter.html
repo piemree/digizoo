@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polyvision</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+        }
+
+        #video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>
+        TESTSETSETSET
+    </h1>
+    <script src="./jquery.min.js"></script>
+    <script>
+        $(function () {
+            function retrieveParam(name) {
+                return (location.search.split(name + '=')[1] || '').split('&')[0];
+            }
+
+            const counterParam = retrieveParam('counter');
+            let counter = null
+            if (counterParam && !isNaN(counterParam)) {
+                $("body").css("min-height", "100vh");
+                $("body").css("position", "relative");
+                counter = parseInt(counterParam)
+                setInterval(() => {
+                    if (counter === 0) return
+                    $("#counter").remove()
+                    counter--
+                    let counterElement = `<span 
+                    style="
+                    color:black;
+                    border-radius:5px;
+                    font-size:64px;
+                    font-weight:bold;
+                    background-color:white;
+                    padding:5px;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    z-index: 10;
+                    transform: translate(-50%,-50%);"
+                    id="counter">${counter}</span>`
+                    $("body").append(counterElement);
+                }, 1000)
+
+
+            }
+
+        })
+    </script>
+</body>
+
+</html>
