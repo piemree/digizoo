@@ -13,7 +13,7 @@ START_BROWSER
 SELECT_SCREEN 3
 START_BROWSER
 
-LOG "successfully started all the browsers"
+LOG "successfully-started-all-the-browsers"
 
 # todo increase this to 30s
 WAIT 5s
