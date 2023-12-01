@@ -1,3 +1,5 @@
+RESTART
+
 # connect to masters socket
 SIGNAL_SERVER "http://briefodasi:3000"
 
