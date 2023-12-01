@@ -15,16 +15,16 @@ START_BROWSER
 TOGO BRIEF_START
 
 SELECT_SCREEN 0
-LOAD_VIDEO "baslamaya.mp4" 10
+LOAD_VIDEO "baslamaya2.mp4" 10
 
 SELECT_SCREEN 1
-LOAD_VIDEO "baslamaya.mp4" 10
+LOAD_VIDEO "baslamaya2.mp4" 10
 
 SELECT_SCREEN 2
-LOAD_VIDEO "baslamaya.mp4" 10
+LOAD_VIDEO "baslamaya2.mp4" 10
 
 SELECT_SCREEN 3
-LOAD_VIDEO "baslamaya.mp4" 10
+LOAD_VIDEO "baslamaya2.mp4" 10
 
 
 
@@ -85,19 +85,19 @@ WAIT 10000
 ##############################
 
 SELECT_SCREEN 0
-LOAD_VIDEO "ilerleyin.mp4"
+LOAD_VIDEO "ilerleyin2.mp4"
 
 
 SELECT_SCREEN 1
-LOAD_VIDEO "ilerleyin.mp4"
+LOAD_VIDEO "ilerleyin2.mp4"
 
 
 SELECT_SCREEN 2
-LOAD_VIDEO "ilerleyin.mp4"
+LOAD_VIDEO "ilerleyin2.mp4"
 
 
 SELECT_SCREEN 3
-LOAD_VIDEO "ilerleyin.mp4"
+LOAD_VIDEO "ilerleyin2.mp4"
 
 WAIT 1000
 
