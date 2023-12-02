@@ -1,0 +1,29 @@
+RESTART
+
+###############################################################################
+# START BROWSERS
+###############################################################################
+
+SELECT_SCREEN 0
+START_BROWSER
+
+# just to make sure
+WAIT 5s
+
+###############################################################################
+# MAIN LOOP START
+###############################################################################
+TOGO AVATAR_MAIN
+
+# load videos
+SELECT_SCREEN 0
+LOAD_VIDEO "video1.mp4" 10
+
+WAIT 3s
+
+SELECT_BOARD 0
+RUN_RELAY "avatar"
+
+WAIT 7s
+
+GOTO AVATAR_MAIN

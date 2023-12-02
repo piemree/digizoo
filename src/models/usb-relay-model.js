@@ -78,9 +78,9 @@ async function executeRelayCommands(RELAY, GATE, COMMANDS) {
     }
 }
 
-async function executeRelayConf(BoardNo, path) {
-    const RELAY = retrieveRelays()[BoardNo - 1]
-    if (!RELAY) throw new Error(`Board #${BoardNo} can not be found`)
+async function executeRelayConf(boardIndex, path) {
+    const RELAY = retrieveRelays()[boardIndex]
+    if (!RELAY) throw new Error(`Board #${boardIndex} can not be found`)
 
     const GATE2COMMANDS = readRelayConf(path)
 
