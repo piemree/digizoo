@@ -10,7 +10,7 @@ const { waitFor } = require('../utils/wait-for')
 const { computeRelayConfPath, executeRelayConf } = require('./usb-relay-model')
 
 const { ShowChromeScriptPath, SetWindowScriptPath, KillChromeeScriptPath, videoHTML, videoHTMLLink, runnerConfsDir } = require('../parameters')
-const {Window} = require('win-control')
+const { Window } = require('win-control')
 
 function createVideoHTMLLink(name, counter) {
     return videoHTMLLink + '?video=' + encodeURI(name) + "&counter=" + encodeURI(counter)
@@ -241,11 +241,14 @@ async function retrieveAnActiveSocketConnection(server = 'http://localhost:3000'
 
 async function waitForSIGNAL(socket, name) {
     console.log('waiting signal', name);
+    setInterval(() => {
+        console.log('status:', socket.connected)
+    }, 2000)
     await new Promise(resolve => {
-        const listener = socket.on('receive', (data) => {
+        socket.on('receive', (data) => {
             if (data === name) {
                 console.log("revieved signal",data);
-                socket.off('receive', listener)
+                socket.off('receive')
                 resolve()
             }
         })

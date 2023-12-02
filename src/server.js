@@ -22,8 +22,9 @@ io.on('connection', (socket) => {
     console.log('[IO] New connection established');
 
     socket.on('send', (data) => {
-        console.log(`[IO] Server received and sent the SIGNAL "${data}"`)
-        io.emit('receive', data)
+        console.log(`[
+            IO] Server received and sent the SIGNAL "${data}"`)
+        io.sockets.emit('receive', data)
     })
     
     socket.on('disconnect', function () {
