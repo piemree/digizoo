@@ -195,7 +195,7 @@ async function launchBrowser(screenIndex = 0) {
             executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
             userDataDir: '.\\UserData' + screenIndex,
             args: [
-                // '--kiosk',
+                '--kiosk',
                 '--start-maximized',
                 '--start-fullscreen',
                 '--disable-infobars',

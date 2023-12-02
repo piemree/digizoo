@@ -28,16 +28,16 @@ SIGNAL "brief-enter"
 
 # load videos
 SELECT_SCREEN 0
-LOAD_VIDEO "baslamaya720.mp4" 10
+LOAD_VIDEO "timelefttostart-final.mp4" 10
 SELECT_SCREEN 1
-LOAD_VIDEO "baslamaya720.mp4" 10
+LOAD_VIDEO "timelefttostart-final.mp4" 10
 SELECT_SCREEN 2
-LOAD_VIDEO "baslamaya720.mp4" 10
+LOAD_VIDEO "timelefttostart-final.mp4" 10
 SELECT_SCREEN 3
-LOAD_VIDEO "baslamaya720.mp4" 10
+LOAD_VIDEO "timelefttostart-final.mp4" 10
 
 # this is the duration of the first video
-WAIT 1s
+WAIT 10s
 
 ###############################################################################
 # play main video
@@ -53,22 +53,22 @@ SELECT_SCREEN 3
 LOAD_VIDEO "video4.mp4"
 
 # this is the duration of the main video
-WAIT 1s
+WAIT 10s
 
 ###############################################################################
 # ilerleyin
 ###############################################################################
 
 SELECT_SCREEN 0
-LOAD_VIDEO "ilerleyin720.mp4"
+LOAD_VIDEO "alandailerleyiniz.mp4"
 SELECT_SCREEN 1
-LOAD_VIDEO "ilerleyin720.mp4"
+LOAD_VIDEO "alandailerleyiniz.mp4"
 SELECT_SCREEN 2
-LOAD_VIDEO "ilerleyin720.mp4"
+LOAD_VIDEO "alandailerleyiniz.mp4"
 SELECT_SCREEN 3
-LOAD_VIDEO "ilerleyin720.mp4"
+LOAD_VIDEO "alandailerleyiniz.mp4"
 
-WAIT 1s
+WAIT 10s
 
 # go back to main loop
 GOTO BRIEF_START
