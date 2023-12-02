@@ -240,15 +240,12 @@ async function retrieveAnActiveSocketConnection(server = 'http://localhost:3000'
 }
 
 async function waitForSIGNAL(socket, name) {
-    console.log('waiting signal', name);
-    setInterval(() => {
-        console.log('status:', socket.connected)
-    }, 2000)
     await new Promise(resolve => {
         socket.on('receive', (data) => {
             if (data === name) {
                 console.log("revieved signal",data);
-                socket.off('receive')
+                // socket.off('receive')
+                socket.disconnect()
                 resolve()
             }
         })
