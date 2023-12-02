@@ -94,7 +94,25 @@ function readRunnerCommands(path) {
             continue
         }
 
-        // if (command === 'MAP_SIGNAL') {}
+        if (
+            command === 'MAP_SIGNAL',
+            command === 'WAIT_RFID'
+        ) {
+            const map = {}
+            const value = parseStr(params[0])
+            const items = value.split(';')
+
+            for (const item of items) {
+                const [lhs, rhs] = item.split('=')
+                map[lhs] = rhs
+            }
+
+            commands.push({
+                type: command,
+                value: value,
+                map: map
+            })
+        }
 
         if (
             command === 'RUN_RELAY' ||
@@ -106,7 +124,6 @@ function readRunnerCommands(path) {
             command === 'SIGNAL_SERVER' ||
             command === 'LOG'
         ) {
-
             commands.push({
                 type: command,
                 value: parseStr(params[0]),
@@ -166,11 +183,11 @@ async function setFore(pid) {
 async function launchBrowser(screenIndex = 0) {
     try {
         // retrieve all the PIDs with the name firefox
-        const pidBlacklist = await getpid('firefox')
+        // const pidBlacklist = await getpid('firefox')
 
         const screen = displays.sort((a, b) => a.left - b.left)[screenIndex] // asc
         if (!screen) throw new Error('Screen not found: ' + screenIndex)
-        const { top, left, width, height } = screen
+        const { top, left } = screen
 
         const browser = await puppeteer.launch({
             headless: false,
@@ -224,14 +241,16 @@ async function launchBrowser(screenIndex = 0) {
 }
 
 let _sockets = {} // server -> socket
-let _socketConnected = false
+let _socketsChannels = {
+    // server -> channel -> socket
+}
 
 async function retrieveAnActiveSocketConnection(server = 'http://localhost:3000') {
     return new Promise((resolve) => {
         if (!_sockets[server]) {
             _sockets[server] = io(server, {
                 reconnection: true,
-                forceNew: true
+                forceNew: false
             })
             console.log('[INFO] Created a new socket instance')
         }
@@ -241,22 +260,48 @@ async function retrieveAnActiveSocketConnection(server = 'http://localhost:3000'
 
 async function waitForSIGNAL(socket, name) {
     await new Promise(resolve => {
-        socket.on('receive', (data) => {
+        if (!_socketsChannels[socket]) {
+            _socketsChannels[socket] = {}
+        }
+
+        const callback = (data) => {
             if (data === name) {
-                console.log("revieved signal",data);
-                // socket.off('receive')
-                socket.disconnect()
                 resolve()
             }
-        })
+        }
+    
+        if (!_socketsChannels[socket]['receive']) {
+            const listener = (data) => {
+                if (_socketsChannels[socket]['receive']) {
+                    _socketsChannels[socket]['receive'](data)
+                }
+                // if (data === name) {
+                //     console.log("recieved signal",data);
+                //     resolve()
+                // }
+            }
+
+            socket.on('receive', listener)
+        }
+
+        _socketsChannels[socket]['receive'] = callback
     })
+    // await new Promise(resolve => {
+    //     socket.on('receive', (data) => {
+    //         if (data === name) {
+    //             console.log("revieved signal",data);
+    //             // socket.off('receive')
+    //             // socket.disconnect()
+    //             resolve()
+    //         }
+    //     })
+    // })
 }
 
 async function waitForRFID(socket) {
     return new Promise(resolve => {
         const listener = socket.on('receive_rfid', (data) => {
             // console.log('received:', data)
-            socket.off('receive_rfid', listener)
             resolve(data)
         })
     })
@@ -301,8 +346,13 @@ async function executeRunnerCommands(
         }
 
         if (type === 'WAIT_SIGNAL') {
+            console.log('waiting for signal', value)
             await waitForSIGNAL(socket, value)
             continue
+        }
+
+        if (type === 'MAP_SIGNAL') {
+
         }
 
         if (type === 'WAIT_RFID') {
