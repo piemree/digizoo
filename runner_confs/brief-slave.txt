@@ -25,7 +25,7 @@ WAIT_SIGNAL "brief-enter"
 LOAD_VIDEO "youycanentry.mp4"
 
 # wait for the video to finish
-WAIT 5s
+WAIT 10s
 
 LOAD_VIDEO "girişicinbeklemenizgerekiyor.mp4" 20
 
