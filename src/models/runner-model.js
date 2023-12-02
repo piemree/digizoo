@@ -178,7 +178,7 @@ async function launchBrowser(screenIndex = 0) {
             executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
             userDataDir: '.\\UserData' + screenIndex,
             args: [
-                '--kiosk',
+                // '--kiosk',
                 '--start-maximized',
                 '--start-fullscreen',
                 '--disable-infobars',
@@ -240,10 +240,11 @@ async function retrieveAnActiveSocketConnection(server = 'http://localhost:3000'
 }
 
 async function waitForSIGNAL(socket, name) {
+    console.log("waiting signal",name);
     await new Promise(resolve => {
         const listener = socket.on('receive', (data) => {
             if (data === name) {
-                // console.log("revieved signal",data);
+                console.log("revieved signal",data);
                 socket.off('receive', listener)
                 resolve()
             }

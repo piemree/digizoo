@@ -22,10 +22,10 @@ TOGO LAPTOP_LOOP
 # load and play you can enter now
 WAIT_SIGNAL "brief-enter"
 
-LOAD_VIDEO "giris-yapabilirsiniz.mp4" 20
+LOAD_VIDEO "giris-yapabilirsiniz.mp4"
 
 # wait for the video to finish
-WAIT 20s
+WAIT 10s
 
 LOAD_VIDEO "giris-icin-bekleyin.mp4" 25
 
