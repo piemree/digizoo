@@ -1,6 +1,7 @@
 const path = require('path')
 
-const videoHTML = path.join(__dirname, '../runner_videos/video.html').replaceAll('\\', '/')
+const videoHTML = path.join(__dirname, '../web/video.html').replaceAll('\\', '/')
+
 module.exports = {
     // localhost: 'http://ionstation:3000',
     SetWindowScriptPath: path.join(__dirname, '../shells/set-window.ps1'),

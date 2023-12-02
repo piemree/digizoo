@@ -7,9 +7,12 @@
     <title>Polyvision</title>
     <style>
         body {
+            position: relative;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
             background-color: #000;
+            overflow: hidden;
         }
 
         #video {
@@ -20,10 +23,34 @@
             height: 100vh;
             z-index: 10;
         }
+
+        #counter {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            color: #000;
+            border-radius: 8px;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            font-weight: 700;
+            width: 72px;
+            height: 72px;
+            font-size: 48px;
+            z-index: 100;
+            display: none;
+        }
+
+        #counter.is-visible {
+            display: flex;
+        }
     </style>
 </head>
 
 <body>
+    <span id="counter"></span>
     <video id="video" autoplay loop playsinline></video>
 
     <script src="./jquery.min.js"></script>
@@ -31,9 +58,11 @@
     <script>
         $(function () {
             const socket = io('http://127.0.0.1:3000');
-
-            var rfidCode = ''
-            var $video = $("#video")
+            
+            let rfidCode = ''
+            
+            const $video = $('#video')
+            const $counter = $('#counter')
 
             function retrieveParam(name) {
                 const url = new URL(window.location.href);
@@ -43,34 +72,26 @@
             const videoName = retrieveParam('video');
             const counterParam = retrieveParam('counter');
 
-            let counter = null
             if (counterParam && !isNaN(counterParam)) {
-                $("body").css("min-height","100vh");
-                $("body").css("position","relative");
-                counter = parseInt(counterParam)
-                setInterval(() => {
-                    if (counter === 0) return
-                    $("#counter").remove()
+                let counter = parseInt(counterParam)
+
+                $counter.addClass('is-visible')
+
+                $counter.text(counter)
+
+                const interval = setInterval(() => {
                     counter--
-                    let counterElement = `<span 
-                    style="
-                    color:black;
-                    border-radius:5px;
-                    font-size:64px;
-                    font-weight:bold;
-                    background-color:white;
-                    padding:5px;
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    z-index: 10;
-                    transform: translate(-50%,-50%);"
-                    id="counter">${counter}</span>`
-                    $("body").append(counterElement);
-                }, 1000)
+                    $counter.text(counter)
+
+                    if (counter === 0) {
+                        $counter.removeClass('is-visible')
+                        clearInterval(interval)
+                        return
+                    }
+                }, 1000) // every sec
             }
 
-            $video.attr('src', './' + videoName);
+            $video.attr('src', '../runner_videos/' + videoName);
 
             // var $v = document.getElementById('video');
 

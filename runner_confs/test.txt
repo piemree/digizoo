@@ -1,13 +1,10 @@
-SELECT_BOARD 0
-RUN_RELAY "avatar"
+RESTART
 
-# RESTART
-# 
-# SELECT_SCREEN 0
-# START_BROWSER
-# 
-# LOAD_VIDEO "baslamaya720.mp4" 10
-# 
-# WAIT 10s
-# 
-# LOAD_VIDEO "video1.mp4"
+SELECT_SCREEN 0
+START_BROWSER
+
+LOAD_VIDEO "baslamaya720.mp4" 10
+
+WAIT 10s
+
+LOAD_VIDEO "video1.mp4"
