@@ -1,0 +1,89 @@
+RESTART
+
+###############################################################################
+# START BROWSERS
+###############################################################################
+
+SELECT_SCREEN 0
+START_BROWSER
+
+SELECT_SCREEN 1
+START_BROWSER
+
+# SELECT_SCREEN 2
+# START_BROWSER
+
+# SELECT_SCREEN 3
+# START_BROWSER
+
+# just to make sure
+WAIT 5s
+
+# play empty videos
+SELECT_SCREEN 0
+LOAD_VIDEO_LOOPLESS ""
+
+SELECT_SCREEN 1
+LOAD_VIDEO_LOOPLESS ""
+
+# put focus on main window
+SELECT_SCREEN 0
+FOCUS_BROWSER
+
+###############################################################################
+# MAIN LOOP START
+###############################################################################
+TOGO LAB_MASTER_START
+
+# wait and map RFIDs
+WAIT_RFID "0-0008114042=SCREEN_0_EGG_0;0-0002532100=SCREEN_0_EGG_1;0-e2=SCREEN_0_EGG_2;0-e3=SCREEN_0_EGG_3;1-0008114042=SCREEN_1_EGG_0;1-0002532100=SCREEN_1_EGG_1;1-e2=SCREEN_1_EGG_2;1-e3=SCREEN_1_EGG_3"
+
+TOGO SCREEN_0_EGG_0
+SELECT_SCREEN 0
+LOAD_VIDEO_LOOPLESS "lab-e0.mp4"
+GOTO LAB_MASTER_START
+
+TOGO SCREEN_0_EGG_1
+SELECT_SCREEN 0
+LOAD_VIDEO_LOOPLESS "lab-e1.mp4"
+GOTO LAB_MASTER_START
+
+TOGO SCREEN_0_EGG_2
+SELECT_SCREEN 0
+LOAD_VIDEO_LOOPLESS "video1.mp4"
+GOTO LAB_MASTER_START
+
+TOGO SCREEN_0_EGG_3
+SELECT_SCREEN 0
+LOAD_VIDEO_LOOPLESS "video1.mp4"
+GOTO LAB_MASTER_START
+
+TOGO SCREEN_0_EGG_4
+SELECT_SCREEN 0
+LOAD_VIDEO_LOOPLESS "video1.mp4"
+GOTO LAB_MASTER_START
+
+TOGO SCREEN_1_EGG_0
+SELECT_SCREEN 1
+LOAD_VIDEO_LOOPLESS "lab-e0.mp4"
+GOTO LAB_MASTER_START
+
+TOGO SCREEN_1_EGG_1
+SELECT_SCREEN 1
+LOAD_VIDEO_LOOPLESS "lab-e1.mp4"
+GOTO LAB_MASTER_START
+
+TOGO SCREEN_1_EGG_2
+SELECT_SCREEN 1
+LOAD_VIDEO_LOOPLESS "video1.mp4"
+GOTO LAB_MASTER_START
+
+TOGO SCREEN_1_EGG_3
+SELECT_SCREEN 1
+LOAD_VIDEO_LOOPLESS "video1.mp4"
+GOTO LAB_MASTER_START
+
+###############################################################################
+# END OF MAIN LOOP -- this is actually unnecessary
+###############################################################################
+GOTO LAB_MASTER_START

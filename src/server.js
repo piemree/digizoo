@@ -1,7 +1,18 @@
 // server related
 const app = require('express')()
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    next()
+})
+
 const server = require('http').createServer(app)
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, {
+    cors: {
+        origin: '*'
+    }
+})
 
 const bodyParser = require('body-parser')
 const path = require('path')
@@ -12,19 +23,18 @@ const { runnerConfsDir } = require('./parameters')
 const { computeRunnerPath, executeRunner } = require('./models/runner-model')
 
 var jsonParser = bodyParser.json()
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-    next()
-})
 
 io.on('connection', (socket) => {
     console.log('[IO] New connection established');
 
     socket.on('send', (data) => {
-        console.log(`[
-            IO] Server received and sent the SIGNAL "${data}"`)
+        console.log(`[IO] Server received and sent the SIGNAL "${data}"`)
         io.sockets.emit('receive', data)
+    })
+
+    socket.on('send_rfid', (data) => {
+        console.log(`[IO] Server received and sent the RFID SIGNAL "${data}"`)
+        io.sockets.emit('receive_rfid', data)
     })
     
     socket.on('disconnect', function () {

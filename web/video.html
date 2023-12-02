@@ -49,7 +49,7 @@
 
 <body>
     <span id="counter"></span>
-    <video id="video" autoplay loop playsinline></video>
+    <video id="video" autoplay playsinline></video>
 
     <script src="./jquery.min.js"></script>
     <script src="./socket.io.min.js"></script>
@@ -69,6 +69,11 @@
 
             const videoName = retrieveParam('video');
             const counterParam = retrieveParam('counter');
+            const loopParam = retrieveParam('loop');
+
+            if (loopParam === 'true') {
+                $video.attr('loop', 'loop');
+            }
 
             if (counterParam && !isNaN(counterParam)) {
                 let counter = parseInt(counterParam)
@@ -137,7 +142,7 @@
 
                 if (e.code === 'Enter') {
                     // emit rfid data to localhost
-                    socket.emit('send_rfid', rfidCode)
+                    socket.emit('send_rfid', `0-${rfidCode}`)
                     rfidCode = ''
                     isToJump = false
                 }

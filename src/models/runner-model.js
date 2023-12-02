@@ -1,24 +1,26 @@
 const puppeteer = require('puppeteer')
 const path = require('path');
-const fs = require('fs')
-const displays = require('displays')()
-const getpid = require('getpid')
-const { spawn } = require("child_process")
+const fs = require('fs');
+const displays = require('displays')();
+var robot = require("robotjs");
 const { io } = require("socket.io-client");
 
-const { waitFor } = require('../utils/wait-for')
-const { computeRelayConfPath, executeRelayConf } = require('./usb-relay-model')
+// const getpid = require('getpid')
+// const { spawn } = require("child_process")
 
-const { ShowChromeScriptPath, SetWindowScriptPath, KillChromeeScriptPath, videoHTML, videoHTMLLink, runnerConfsDir } = require('../parameters')
-const { Window } = require('win-control')
+const { waitFor } = require('../utils/wait-for');
+const { computeRelayConfPath, executeRelayConf } = require('./usb-relay-model');
 
-function createVideoHTMLLink(name, counter) {
-    return videoHTMLLink + '?video=' + encodeURI(name) + "&counter=" + encodeURI(counter)
+const { videoHTMLLink, runnerConfsDir } = require('../parameters');
+const { Window } = require('win-control');
+
+function createVideoHTMLLink(name, counter, loop) {
+    return `${videoHTMLLink}?video=${encodeURI(name)}&counter=${encodeURI(counter)}&loop=${loop}`
 }
 
-async function openVideoInTab(tab, name, counter) {
+async function openVideoInTab(tab, name, counter, loop) {
     await tab.goto(
-        createVideoHTMLLink(name, counter),
+        createVideoHTMLLink(name, counter, loop),
         { waitUntil: 'domcontentloaded', timeout: 0 }
     )
 }
@@ -117,6 +119,7 @@ function readRunnerCommands(path) {
         if (
             command === 'RUN_RELAY' ||
             command === 'LOAD_VIDEO' ||
+            command === 'LOAD_VIDEO_LOOPLESS' ||
             // command === 'EXECUTE_REMOTE_RUNNER' ||
             command === 'WAIT_SIGNAL' ||
             command === 'SIGNAL' ||
@@ -136,6 +139,7 @@ function readRunnerCommands(path) {
             command === 'PLAY_VIDEO' ||
             command === 'PAUSE_VIDEO' ||
             command === 'START_BROWSER' ||
+            command === 'FOCUS_BROWSER' ||
             command === 'RESTART'
         ) {
             commands.push({
@@ -161,19 +165,19 @@ function readRunnerCommands(path) {
 //     ])
 // }
 
-let BROWSERS = []
+// let BROWSERS = []
 
-async function killAllChromee() {
-    for (const browser of BROWSERS) {
-        if (browser) {
-            await browser.close()
-        }
-    }
+// async function killAllChromee() {
+//     for (const browser of BROWSERS) {
+//         if (browser) {
+//             await browser.close()
+//         }
+//     }
 
-    BROWSERS = []
-    // spawn('powershell.exe', [`. "${KillChromeeScriptPath}";`])
-    // await waitFor(1000)
-}
+//     BROWSERS = []
+//     // spawn('powershell.exe', [`. "${KillChromeeScriptPath}";`])
+//     // await waitFor(1000)
+// }
 
 async function setFore(pid) {
     Window.getByPid(pid).setForeground()
@@ -286,24 +290,31 @@ async function waitForSIGNAL(socket, name) {
 
         _socketsChannels[socket]['receive'] = callback
     })
-    // await new Promise(resolve => {
-    //     socket.on('receive', (data) => {
-    //         if (data === name) {
-    //             console.log("revieved signal",data);
-    //             // socket.off('receive')
-    //             // socket.disconnect()
-    //             resolve()
-    //         }
-    //     })
-    // })
 }
 
 async function waitForRFID(socket) {
-    return new Promise(resolve => {
-        const listener = socket.on('receive_rfid', (data) => {
-            // console.log('received:', data)
+    return await new Promise(resolve => {
+        if (!_socketsChannels[socket]) {
+            _socketsChannels[socket] = {}
+        }
+
+        const callback = (data) => {
+            console.log('callbackherewith', data)
             resolve(data)
-        })
+        }
+    
+        if (!_socketsChannels[socket]['receive_rfid']) {
+            const listener = (data) => {
+                console.log('listener-received', data)
+                if (_socketsChannels[socket]['receive_rfid']) {
+                    _socketsChannels[socket]['receive_rfid'](data)
+                }
+            }
+
+            socket.on('receive_rfid', listener)
+        }
+
+        _socketsChannels[socket]['receive_rfid'] = callback
     })
 }
 
@@ -316,7 +327,7 @@ async function executeRunnerCommands(
     selectedSocketServer = 'http://localhost:3000'
 ) {
     for (const command of commands) {
-        const { type, value, value2 } = command
+        const { type, value, value2, map } = command
         const socket = await retrieveAnActiveSocketConnection(selectedSocketServer)
 
         if (GOTO !== null) {
@@ -351,14 +362,11 @@ async function executeRunnerCommands(
             continue
         }
 
-        if (type === 'MAP_SIGNAL') {
-
-        }
-
         if (type === 'WAIT_RFID') {
             const rfid = await waitForRFID(socket)
-            console.log('rfidread:', rfid)
             const TOGO = map[rfid]
+            console.log('rfidread:', rfid)
+            console.log('rfidtogo:', TOGO)
             executeRunnerCommands(commands, TOGO, selectedScreen, selectedBoard, screen2Browser, selectedSocketServer)
             break
         }
@@ -411,19 +419,42 @@ async function executeRunnerCommands(
             continue
         }
 
-        if (type === 'LOAD_VIDEO') {
-            console.log('loadvid', value, value2)
-
+        if (type === 'LOAD_VIDEO' || type === 'LOAD_VIDEO_LOOPLESS') {
             if (!selectedScreen && selectedScreen !== 0) throw new Error('No screen selected')
             const browser = screen2Browser[selectedScreen]
             if (!browser) throw new Error('No browser on screen: ' + selectedScreen)
         
             const page = (await browser.pages())[1]
-            await openVideoInTab(page, value, value2)
+            await openVideoInTab(page, value, value2, type === 'LOAD_VIDEO')
 
             // waitFor(1000).then(() => {
                 //     page.keyboard.press('r') // play video
             // })
+
+            continue
+        }
+
+        if (type === 'FOCUS_BROWSER') {
+            await waitFor(5000);
+
+            const browser = screen2Browser[selectedScreen]
+            if (!browser) throw new Error('No browser on screen: ' + selectedScreen)
+        
+            const page = (await browser.pages())[1]
+            await openVideoInTab(page, value, value2, type === 'LOAD_VIDEO')
+
+            await page.bringToFront()
+
+            robot.moveMouse(100, 100);
+            robot.mouseClick();
+
+            await waitFor(1000);
+
+            const screen = displays.sort((a, b) => a.left - b.left)[0]
+            
+            if (screen) {
+                robot.moveMouse(0, screen.height)
+            }
 
             continue
         }
