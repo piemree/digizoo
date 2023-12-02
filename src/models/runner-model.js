@@ -240,7 +240,7 @@ async function retrieveAnActiveSocketConnection(server = 'http://localhost:3000'
 }
 
 async function waitForSIGNAL(socket, name) {
-    console.log("waiting signal",name);
+    console.log('waiting signal', name);
     await new Promise(resolve => {
         const listener = socket.on('receive', (data) => {
             if (data === name) {
@@ -362,6 +362,8 @@ async function executeRunnerCommands(
         }
 
         if (type === 'LOAD_VIDEO') {
+            console.log('loadvid', value, value2)
+
             if (!selectedScreen && selectedScreen !== 0) throw new Error('No screen selected')
             const browser = screen2Browser[selectedScreen]
             if (!browser) throw new Error('No browser on screen: ' + selectedScreen)
