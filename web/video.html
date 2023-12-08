@@ -1,154 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Polyvision</title>
     <style>
-        body {
-            position: relative;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background-color: #000;
-            overflow: hidden;
-        }
+      body {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background-color: #000;
+        overflow: hidden;
+      }
 
-        #video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 10;
-        }
+      #video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 10;
+      }
 
-        #counter {
-            position: fixed;
-            top: 70%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #FFFF;
-            justify-content: center;
-            align-items: center;
-            font-family: sans-serif;
-            font-weight: 700;
-            width: 72px;
-            height: 72px;
-            font-size: 56px;
-            z-index: 100;
-            display: none;
-        }
+      #counter {
+        position: fixed;
+        top: 70%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #ffff;
+        justify-content: center;
+        align-items: center;
+        font-family: sans-serif;
+        font-weight: 700;
+        width: 72px;
+        height: 72px;
+        font-size: 56px;
+        z-index: 100;
+        display: none;
+      }
 
-        #counter.is-visible {
-            display: flex;
-        }
+      #counter.is-visible {
+        display: flex;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <span id="counter"></span>
     <video id="video" autoplay playsinline></video>
 
     <script src="./jquery.min.js"></script>
     <script src="./socket.io.min.js"></script>
     <script>
-        $(function () {
-            const socket = io('http://127.0.0.1:3000');
-            
-            let rfidCode = ''
-            
-            const $video = $('#video')
-            const $counter = $('#counter')
+      $(function () {
+        const socket = io("http://127.0.0.1:3000");
 
-            function retrieveParam(name) {
-                const url = new URL(window.location.href);
-                return url.searchParams.get(name);
+        let rfidCode = "";
+
+        const $video = $("#video");
+        const $counter = $("#counter");
+
+        function retrieveParam(name) {
+          const url = new URL(window.location.href);
+          return url.searchParams.get(name);
+        }
+
+        const videoName = retrieveParam("video");
+        const counterParam = retrieveParam("counter");
+        const loopParam = retrieveParam("loop");
+        const outid = retrieveParam("outid");
+
+        if (loopParam === "true") {
+          $video.attr("loop", "loop");
+        }
+
+        if (counterParam && !isNaN(counterParam)) {
+          let counter = parseInt(counterParam);
+
+          $counter.addClass("is-visible");
+
+          $counter.text(counter);
+
+          const interval = setInterval(() => {
+            counter--;
+            $counter.text(counter);
+
+            if (counter === 0) {
+              $counter.removeClass("is-visible");
+              clearInterval(interval);
+              return;
             }
+          }, 1000); // every sec
+        }
 
-            const videoName = retrieveParam('video');
-            const counterParam = retrieveParam('counter');
-            const loopParam = retrieveParam('loop');
+        $video.attr("src", "../runner_videos/" + videoName);
 
-            if (loopParam === 'true') {
-                $video.attr('loop', 'loop');
+        // var $v = document.getElementById('video');
+
+        // $v.addEventListener('ended', function() {
+        //     this.currentTime = 0;
+        //     this.play();
+        // }, false);
+
+        // $v.play();
+
+        if (outid) {
+          console.log("outid: " + outid);
+          (async () => {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const audioDevices = devices.filter(
+              (device) => device.kind === "audiooutput"
+            );
+            const device = audioDevices.find((device) =>
+              // device.deviceId !== "default" &&
+              // device.devideId !== "communications" &&
+              device.label.includes(outid)
+            );
+
+            if (!device) {
+              alert("There is no such device that includes: " + outid);
+            } else {
+              document.getElementById("video").setSinkId(device.deviceId);
             }
+          })();
+        }
 
-            if (counterParam && !isNaN(counterParam)) {
-                let counter = parseInt(counterParam)
+        var isToJump = false;
+        var toJump = "";
 
-                $counter.addClass('is-visible')
+        $(document).on("keypress", function (e) {
+          if (e.code === "KeyR") {
+            $video.trigger("play");
+          }
 
-                $counter.text(counter)
+          if (e.code === "KeyP") {
+            $video.trigger("pause");
+          }
 
-                const interval = setInterval(() => {
-                    counter--
-                    $counter.text(counter)
+          if (e.code === "KeyJ") {
+            document.getElementById("video").currentTime = parseFloat(toJump);
+            toJump = "";
+            isToJump = false;
+          }
 
-                    if (counter === 0) {
-                        $counter.removeClass('is-visible')
-                        clearInterval(interval)
-                        return
-                    }
-                }, 1000) // every sec
+          if (e.code === "KeyD") {
+            isToJump = true;
+            toJump = "";
+          }
+
+          if ((e.keyCode >= 48 && e.keyCode <= 57) || e.key === ".") {
+            if (isToJump) {
+              toJump += e.key;
+            } else {
+              console.log(e);
+              rfidCode += e.key;
             }
+          }
 
-            $video.attr('src', '../runner_videos/' + videoName);
-
-            // var $v = document.getElementById('video');
-
-            // $v.addEventListener('ended', function() {
-            //     this.currentTime = 0;
-            //     this.play();
-            // }, false);
-
-            // $v.play();
-
-            var isToJump = false
-            var toJump = ''
-
-            $(document).on('keypress', function (e) {
-                if (e.code === 'KeyR') {
-                    $video.trigger('play');
-                }
-
-                if (e.code === 'KeyP') {
-                    $video.trigger('pause');
-                }
-
-                if (e.code === 'KeyJ') {
-                    document.getElementById('video').currentTime = parseFloat(toJump)
-                    toJump = ''
-                    isToJump = false
-                }
-
-                if (e.code === 'KeyD') {
-                    isToJump = true
-                    toJump = ''
-                }
-
-                if (
-                    (e.keyCode >= 48 && e.keyCode <= 57) ||
-                    (e.key === '.')
-                ) {
-                    if (isToJump) {
-                        toJump += e.key
-                    } else {
-                        console.log(e)
-                        rfidCode += e.key
-                    }
-                }
-
-                if (e.code === 'Enter') {
-                    // emit rfid data to localhost
-                    socket.emit('send_rfid', `0-${rfidCode}`)
-                    rfidCode = ''
-                    isToJump = false
-                }
-            });
-        })
+          if (e.code === "Enter") {
+            // emit rfid data to localhost
+            socket.emit("send_rfid", `0-${rfidCode}`);
+            rfidCode = "";
+            isToJump = false;
+          }
+        });
+      });
     </script>
-</body>
-
+  </body>
 </html>
