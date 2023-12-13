@@ -228,7 +228,7 @@ async function launchBrowser(screenIndex = 0) {
         "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
       userDataDir: ".\\UserData" + screenIndex,
       args: [
-        //  "--kiosk",
+         "--kiosk",
         "--unsafely-treat-insecure-origin-as-secure",
         "--unsafety-treat-insecure-origin-as-secure",
         "--use-fake-ui-for-media-stream",
