@@ -61,6 +61,7 @@
       function timeUpdateHandler() {}
 
       videoSev.addEventListener("ended", function (data) {
+        socket.emit("sev-stop");
         videoSev.classList.remove("show");
         videoSev.setAttribute("muted", true);
         videoBesle.classList.remove("show");
@@ -72,6 +73,7 @@
         video.play();
       });
       videoBesle.addEventListener("ended", function (data) {
+        socket.emit("besle-stop");
         videoSev.classList.remove("show");
         videoSev.setAttribute("muted", true);
         videoBesle.classList.remove("show");
@@ -84,6 +86,11 @@
       });
 
       socket.on("sev-master", function (data) {
+        const playingNow =
+          videoSev.classList.contains("show") ||
+          videoBesle.classList.contains("show");
+        if (playingNow) return;
+        socket.emit("sev-start");
         video.classList.remove("show");
         video.setAttribute("muted", true);
         videoBesle.classList.remove("show");
@@ -91,10 +98,14 @@
 
         videoSev.classList.add("show");
         videoSev.removeAttribute("muted");
-        videoSev.currentTime = 9;
         videoSev.play();
       });
       socket.on("besle-master", function (data) {
+        const playingNow =
+          videoSev.classList.contains("show") ||
+          videoBesle.classList.contains("show");
+        if (playingNow) return;
+        socket.emit("besle-start");
         video.classList.remove("show");
         video.setAttribute("muted", true);
         videoSev.classList.remove("show");

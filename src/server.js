@@ -1,52 +1,67 @@
 // server related
-const app = require('express')()
+const app = require("express")();
 
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-    next()
-})
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
-const server = require('http').createServer(app)
-const io = require('socket.io')(server, {
-    cors: {
-        origin: '*'
-    }
-})
+const server = require("http").createServer(app);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+  },
+});
 
-const bodyParser = require('body-parser')
-const path = require('path')
-const fs = require('fs')
+const bodyParser = require("body-parser");
+const path = require("path");
+const fs = require("fs");
 
 // parameters
-const { runnerConfsDir } = require('./parameters')
-const { computeRunnerPath, executeRunner } = require('./models/runner-model')
+const { runnerConfsDir } = require("./parameters");
+const { computeRunnerPath, executeRunner } = require("./models/runner-model");
 
-var jsonParser = bodyParser.json()
+var jsonParser = bodyParser.json();
 
-io.on('connection', (socket) => {
-    console.log('[IO] New connection established');
-    socket.on('send', (data) => {
-        console.log(`[IO] Server received and sent the SIGNAL "${data}"`)
-        io.sockets.emit('receive', data)
-    })
+io.on("connection", (socket) => {
+  console.log("[IO] New connection established");
+  socket.on("send", (data) => {
+    console.log(`[IO] Server received and sent the SIGNAL "${data}"`);
+    io.sockets.emit("receive", data);
+  });
 
-    socket.on('send_rfid', (data) => {
-        console.log(`[IO] Server received and sent the RFID SIGNAL "${data}"`)
-        io.sockets.emit('receive_rfid', data)
-    })
-    
-    socket.on('disconnect', function () {
-      console.log('[IO] Connection closed');
-    })
+  socket.on("send_rfid", (data) => {
+    console.log(`[IO] Server received and sent the RFID SIGNAL "${data}"`);
+    io.sockets.emit("receive_rfid", data);
+  });
 
-    socket.on("sev",function () {
-        io.sockets.emit('sev-master')
-    })
-    socket.on("besle",function () {
-        io.sockets.emit('besle-master')
-    })
-})
+  socket.on("disconnect", function () {
+    console.log("[IO] Connection closed");
+  });
+
+  socket.on("sev", function () {
+    io.sockets.emit("sev-master");
+  });
+  socket.on("besle", function () {
+    io.sockets.emit("besle-master");
+  });
+  socket.on("sev-start", function () {
+    io.sockets.emit("sev-start-client");
+  });
+  socket.on("besle-start", function () {
+    io.sockets.emit("besle-start-client");
+  });
+  socket.on("sev-stop", function () {
+    io.sockets.emit("sev-stop-client");
+  });
+  socket.on("besle-stop", function () {
+    io.sockets.emit("besle-stop-client");
+  });
+});
 
 // app.get('/relay/retrieve-boards', function (req, res) {
 //     // res.json(retrieveRelays())
@@ -62,7 +77,6 @@ io.on('connection', (socket) => {
 //     // res.json(['a', 'be', 'cece', 'dea'])
 // })
 
-
 // app.post('/relay/create-program', jsonParser, function (req, res) {
 //     const { name, conf } = req.body
 //     const relayConfsDir = path.join(__dirname, '../relay_confs')
@@ -72,21 +86,21 @@ io.on('connection', (socket) => {
 //     res.json({ success: true })
 // })
 
-app.get('/retrieve-runners', (req, res) => {
-    const files = fs
-        .readdirSync(runnerConfsDir)
-        .map((file) => file.replace('.txt', ''))
+app.get("/retrieve-runners", (req, res) => {
+  const files = fs
+    .readdirSync(runnerConfsDir)
+    .map((file) => file.replace(".txt", ""));
 
-    res.json(files)
-})
+  res.json(files);
+});
 
-app.post('/execute-runner', jsonParser, (req, res) => {
-    const { name } = req.body
-    executeRunner(computeRunnerPath(name))
+app.post("/execute-runner", jsonParser, (req, res) => {
+  const { name } = req.body;
+  executeRunner(computeRunnerPath(name));
 
-    res.json({ success: true })
-})
+  res.json({ success: true });
+});
 
 server.listen(3000, () => {
-    console.log('[INFO] Server is active on the port 3000')
-})
+  console.log("[INFO] Server is active on the port 3000");
+});
