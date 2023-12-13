@@ -102,6 +102,7 @@
 
         videoSev.classList.add("show");
         videoSev.removeAttribute("muted");
+        videoSev.currentTime = 4;
         videoSev.play();
       });
       socket.on("besle-master", function (data) {
