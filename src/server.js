@@ -26,7 +26,6 @@ var jsonParser = bodyParser.json()
 
 io.on('connection', (socket) => {
     console.log('[IO] New connection established');
-
     socket.on('send', (data) => {
         console.log(`[IO] Server received and sent the SIGNAL "${data}"`)
         io.sockets.emit('receive', data)
@@ -39,6 +38,13 @@ io.on('connection', (socket) => {
     
     socket.on('disconnect', function () {
       console.log('[IO] Connection closed');
+    })
+
+    socket.on("sev",function () {
+        io.sockets.emit('sev-master')
+    })
+    socket.on("besle",function () {
+        io.sockets.emit('besle-master')
     })
 })
 

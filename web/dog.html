@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        position: relative;
+        background-color: black;
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        padding-left: 50px;
+        padding-right: 50px;
+        align-items: center;
+        height: 97vh;
+      }
+      button {
+        width: 100%;
+        height: 50%;
+        border-radius: 50px;
+        font-size: 50px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      #sev {
+        background-color: rgb(234, 91, 91);
+        color: white;
+      }
+      #besle {
+        background-color: rgb(99, 228, 99);
+        color: white;
+      }
+    </style>
+    <title>DOG</title>
+  </head>
+
+  <body>
+    <button id="sev">sev</button>
+    <button id="besle">besle</button>
+    <script src="./socket.io.min.js"></script>
+    <script type="text/javascript">
+      const sevBtn = document.getElementById("sev");
+      const besleBtn = document.getElementById("besle");
+      var socket = io("http://localhost:3000");
+
+      socket.on("connect", function (data) {
+        console.log("connection connection");
+      });
+
+      sevBtn.addEventListener("click", () => {
+        socket.emit("sev");
+      });
+
+      besleBtn.addEventListener("click", () => {
+        socket.emit("besle");
+      });
+    </script>
+  </body>
+</html>

@@ -5,13 +5,14 @@ const displays = require("displays")();
 var robot = require("robotjs");
 const { io } = require("socket.io-client");
 
+
 // const getpid = require('getpid')
 // const { spawn } = require("child_process")
 
 const { waitFor } = require("../utils/wait-for");
 const { computeRelayConfPath, executeRelayConf } = require("./usb-relay-model");
 
-const { videoHTMLLink, runnerConfsDir } = require("../parameters");
+const { videoHTMLLink, dogHTMLLink, dogMasterHTMLLink, runnerConfsDir } = require("../parameters");
 const { Window } = require("win-control");
 
 function createVideoHTMLLink(name, counter, loop, selectedAudio) {
@@ -20,8 +21,24 @@ function createVideoHTMLLink(name, counter, loop, selectedAudio) {
   )}&loop=${loop}&outid=${encodeURI(selectedAudio)}`;
 }
 
+
 async function openVideoInTab(tab, name, counter, loop, selectedAudio) {
   await tab.goto(createVideoHTMLLink(name, counter, loop, selectedAudio), {
+    waitUntil: "domcontentloaded",
+    timeout: 0,
+  });
+}
+
+async function openDogHtmlInTab(tab) {
+  console.log(dogHTMLLink);
+  await tab.goto(dogHTMLLink, {
+    waitUntil: "domcontentloaded",
+    timeout: 0,
+  });
+}
+
+async function openDogMasterHtmlInTab(tab) {
+  await tab.goto(dogMasterHTMLLink, {
     waitUntil: "domcontentloaded",
     timeout: 0,
   });
@@ -140,7 +157,12 @@ function readRunnerCommands(path) {
       });
       continue;
     }
-
+    if (command === "LOAD_DOG_HTML" || "LOAD_DOG_MASTER_HTML") {
+      commands.push({
+        type: command
+      });
+      continue;
+    }
     if (
       command === "PLAY_VIDEO" ||
       command === "PAUSE_VIDEO" ||
@@ -206,7 +228,7 @@ async function launchBrowser(screenIndex = 0) {
         "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
       userDataDir: ".\\UserData" + screenIndex,
       args: [
-        // "--kiosk",
+        //   "--kiosk",
         "--unsafely-treat-insecure-origin-as-secure",
         "--unsafety-treat-insecure-origin-as-secure",
         "--use-fake-ui-for-media-stream",
@@ -330,6 +352,8 @@ async function waitForRFID(socket) {
   });
 }
 
+
+
 async function executeRunnerCommands(
   commands,
   GOTO = null,
@@ -339,6 +363,7 @@ async function executeRunnerCommands(
   screen2Audio = {},
   selectedSocketServer = "http://localhost:3000",
 ) {
+  console.log({ commands });
   for (const command of commands) {
     const { type, value, value2, map } = command;
     const socket = await retrieveAnActiveSocketConnection(selectedSocketServer);
@@ -398,7 +423,7 @@ async function executeRunnerCommands(
       );
       break;
     }
-
+    console.log(type);
     if (type === "SIGNAL") {
       socket.emit("send", value);
       continue;
@@ -468,7 +493,36 @@ async function executeRunnerCommands(
 
       continue;
     }
+    if (type === "LOAD_DOG_HTML") {
+      console.log("dog html");
+      if (!selectedScreen && selectedScreen !== 0)
+        throw new Error("No screen selected");
+      const browser = screen2Browser[selectedScreen];
+      if (!browser) throw new Error("No browser on screen: " + selectedScreen);
 
+      const page = (await browser.pages())[1];
+      await openDogHtmlInTab(page)
+      // waitFor(1000).then(() => {
+      //     page.keyboard.press('r') // play video
+      // })
+
+      continue;
+    }
+    if (type === "LOAD_DOG_MASTER_HTML") {
+      console.log("dog html");
+      if (!selectedScreen && selectedScreen !== 0)
+        throw new Error("No screen selected");
+      const browser = screen2Browser[selectedScreen];
+      if (!browser) throw new Error("No browser on screen: " + selectedScreen);
+
+      const page = (await browser.pages())[1];
+      await openDogMasterHtmlInTab(page)
+      // waitFor(1000).then(() => {
+      //     page.keyboard.press('r') // play video
+      // })
+
+      continue;
+    }
     if (type === "FOCUS_BROWSER") {
       await waitFor(5000);
 

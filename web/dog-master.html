@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        position: relative;
+        background-color: black;
+      }
+      .video {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <title>DOG MASTER</title>
+  </head>
+
+  <body>
+    <video
+      id="video"
+      class="video"
+      loop
+      autoplay
+      src="../runner_videos/egg.mp4"
+    ></video>
+
+    <script src="./socket.io.min.js"></script>
+    <script type="text/javascript">
+      var socket = io("http://localhost:3000");
+
+      const video = document.getElementById("video");
+
+      const mainVideoUrl = "../runner_videos/egg.mp4";
+      const sevVideoUrl = "../runner_videos/alandailerleyiniz.mp4";
+      const besleVideoUrl = "../runner_videos/video1.mp4";
+
+      video.addEventListener("ended", function () {
+        // if video different from main video then play main video
+        if (video.src !== mainVideoUrl) {
+          video.src = mainVideoUrl;
+          // add loop
+          video.loop = true;
+          // play video
+          video.play();
+        }
+      });
+
+      socket.on("connect", function (data) {
+        console.log("connection connection");
+      });
+
+      socket.on("sev-master", function (data) {
+        video.src = sevVideoUrl;
+        video.loop = false;
+        video.play();
+      });
+      socket.on("besle-master", function (data) {
+        video.src = besleVideoUrl;
+        video.loop = false;
+        video.play();
+      });
+    </script>
+  </body>
+</html>
