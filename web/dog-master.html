@@ -27,7 +27,7 @@
       class="video"
       loop
       autoplay
-      src="../runner_videos/egg.mp4"
+      src="../runner_videos/kopek_bekle.mp4"
     ></video>
 
     <script src="./socket.io.min.js"></script>
@@ -36,9 +36,9 @@
 
       const video = document.getElementById("video");
 
-      const mainVideoUrl = "../runner_videos/egg.mp4";
-      const sevVideoUrl = "../runner_videos/alandailerleyiniz.mp4";
-      const besleVideoUrl = "../runner_videos/video1.mp4";
+      const mainVideoUrl = "../runner_videos/kopek_bekle.mp4";
+      const sevVideoUrl = "../runner_videos/kopek_sev.mp4";
+      const besleVideoUrl = "../runner_videos/kopek_besle.mp4";
 
       video.addEventListener("ended", function () {
         // if video different from main video then play main video
@@ -58,11 +58,13 @@
       socket.on("sev-master", function (data) {
         video.src = sevVideoUrl;
         video.loop = false;
+        video.currentTime = 9;
         video.play();
       });
       socket.on("besle-master", function (data) {
         video.src = besleVideoUrl;
         video.loop = false;
+        video.currentTime = 10;
         video.play();
       });
     </script>
