@@ -243,13 +243,13 @@ async function launchBrowser(screenIndex = 0) {
         "--noerrdialogs",
         "--autoplay-policy=no-user-gesture-required",
         "--disable-pinch",
-        "–disable-features=TouchpadOverscrollHistoryNavigation",
+        "-–disable-features=TouchpadOverscrollHistoryNavigation",
         `--window-position=${left},${top}`,
       ],
       ignoreDefaultArgs: [
         "--enable-blink-features=IdleDetection",
         "--enable-automation",
-        
+
       ],
       defaultViewport: null,
     });
