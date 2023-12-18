@@ -67,25 +67,25 @@
       videoSev.addEventListener("ended", function (data) {
         socket.emit("sev-stop");
         videoSev.classList.remove("show");
-        videoSev.setAttribute("muted", true);
+        videoSev.muted = true;
         videoBesle.classList.remove("show");
-        videoBesle.setAttribute("muted", true);
+        videoBesle.muted = true;
 
         video.classList.add("show");
-        video.removeAttribute("muted");
+        video.muted = false;
         video.currentTime = 1;
         video.play();
       });
       videoBesle.addEventListener("ended", function (data) {
         socket.emit("besle-stop");
         videoSev.classList.remove("show");
-        videoSev.setAttribute("muted", true);
+        videoSev.muted = true;
         videoBesle.classList.remove("show");
-        videoBesle.setAttribute("muted", true);
+        videoBesle.muted = true;
 
         video.classList.add("show");
-        video.removeAttribute("muted");
-        //video.currentTime = 0.5;
+        video.muted = false;
+        video.currentTime = 0.5;
         video.play();
       });
 
@@ -96,12 +96,12 @@
         if (playingNow) return;
         socket.emit("sev-start");
         video.classList.remove("show");
-        video.setAttribute("muted", true);
+        video.muted = true;
+        videoBesle.muted = true;
         videoBesle.classList.remove("show");
-        videoBesle.setAttribute("muted", true);
 
         videoSev.classList.add("show");
-        videoSev.removeAttribute("muted");
+        videoSev.muted = false;
         videoSev.currentTime = 4;
         videoSev.play();
       });
@@ -112,12 +112,12 @@
         if (playingNow) return;
         socket.emit("besle-start");
         video.classList.remove("show");
-        video.setAttribute("muted", true);
+        video.muted = true;
         videoSev.classList.remove("show");
-        videoSev.setAttribute("muted", true);
+        videoSev.muted = true;
 
         videoBesle.classList.add("show");
-        videoBesle.removeAttribute("muted");
+        videoBesle.muted = false;
         videoBesle.currentTime = 9;
         videoBesle.play();
       });
